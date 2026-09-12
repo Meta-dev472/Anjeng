@@ -632,7 +632,9 @@ input:focus-visible,
   right: 0;
   width: min(80%, 320px);
   height: 100%;
-  background-color: var(--dark-bg-flat);
+  /* Mengikuti tema (bukan hitam konstan): putih di mode terang,
+     permukaan gelap di mode gelap — sama seperti dropdown desktop */
+  background-color: var(--surface);
   padding: 5.5rem var(--space-md) var(--space-md);
   overflow-y: auto;
   overscroll-behavior: contain;
@@ -653,30 +655,31 @@ input:focus-visible,
 .header__nav-link {
   display: block;
   font-weight: 500;
-  color: var(--dark-heading);
+  color: var(--heading);
   padding: 0.6rem 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--border);
   transition: var(--transition-base);
 }
 
 .header__nav-link:hover {
-  color: var(--dark-text-faint);
+  color: var(--accent-ink);
   padding-left: 0.4rem;
 }
 
 .header__nav-link--cta {
   margin-top: var(--space-xs);
   text-align: center;
-  background-color: var(--dark-heading);
-  color: var(--ink-950);
+  /* Senada dengan tombol CTA di navbar desktop: aksen biru */
+  background-color: var(--accent);
+  color: var(--on-accent);
   border-radius: var(--radius-sm);
   border-bottom: none;
   font-weight: 600;
 }
 
 .header__nav-link--cta:hover {
-  background-color: var(--ink-300);
-  color: var(--ink-950);
+  background-color: var(--accent-hover);
+  color: var(--on-accent);
   padding-left: 0;
 }
 
@@ -691,7 +694,7 @@ input:focus-visible,
   visibility: visible;
   pointer-events: auto;
   transition: transform 0.35s ease, visibility 0s;
-  box-shadow: -8px 0 30px rgba(0, 0, 0, 0.35);
+  box-shadow: var(--shadow-lg);
 }
 
 /* Animasi ikon hamburger jadi silang saat aktif */
@@ -2747,23 +2750,23 @@ html.theme-anim .vision::after {
   display: block;
   padding: 0.5rem 0 0.5rem 0.9rem;
   font-size: 0.92rem;
-  color: var(--dark-text);
-  border-left: 1px solid rgba(255, 255, 255, 0.14);
+  color: var(--text-muted);
+  border-left: 1px solid var(--border);
   transition: var(--transition-base);
 }
 
 .header__subnav-link:hover {
-  color: var(--dark-heading);
+  color: var(--heading);
 }
 
 .header__subnav-link.is-active {
-  color: var(--dark-heading);
+  color: var(--heading);
   font-weight: 600;
 }
 
 /* Penanda halaman aktif */
 .header__nav-link.is-active {
-  color: var(--dark-heading);
+  color: var(--heading);
   font-weight: 600;
 }
 
