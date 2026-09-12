@@ -141,6 +141,27 @@
   --hero-shadow: 0 20px 48px rgba(15, 23, 42, 0.12);
   --hero-shadow-soft: 0 16px 34px rgba(15, 23, 42, 0.1);
 
+  /* Page-hero (halaman dalam): kini mengikuti tema, bukan selalu gelap */
+  --phero-bg: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+  --phero-heading: #0f172a;
+  --phero-text: #475569;
+  --phero-text-faint: #64748b;
+  --phero-glow: radial-gradient(circle, rgba(30, 102, 245, 0.1) 0%, transparent 70%);
+
+  /* Tombol kaca (ghost) di atas latar terang: gelap tipis agar terbaca.
+     Varian untuk section selalu gelap diatur terpisah (lihat .btn--ghost). */
+  --ghost-bg: rgba(15, 23, 42, 0.04);
+  --ghost-bg-hover: rgba(15, 23, 42, 0.09);
+  --ghost-border: rgba(15, 23, 42, 0.18);
+  --ghost-border-hover: rgba(15, 23, 42, 0.34);
+  --ghost-text: #0f172a;
+  --ghost-shadow: 0 10px 24px rgba(15, 23, 42, 0.12);
+
+  /* Tag di atas page-hero: biru yang cukup pekat untuk latar terang */
+  --tag-phero-text: #1d4fc0;
+  --tag-phero-bg: rgba(30, 102, 245, 0.08);
+  --tag-phero-border: rgba(30, 102, 245, 0.26);
+
   color-scheme: light;
 }
 
@@ -208,6 +229,24 @@
   --hero-visual-mark: rgba(255, 255, 255, 0.08);
   --hero-shadow: 0 20px 48px rgba(0, 0, 0, 0.5);
   --hero-shadow-soft: 0 16px 34px rgba(0, 0, 0, 0.5);
+
+  /* Page-hero versi gelap: kembali ke permukaan hitam seperti semula */
+  --phero-bg: linear-gradient(160deg, var(--ink-900) 0%, var(--ink-950) 100%);
+  --phero-heading: #ffffff;
+  --phero-text: var(--ink-300);
+  --phero-text-faint: var(--ink-400);
+  --phero-glow: var(--dark-glow-a);
+
+  --ghost-bg: rgba(255, 255, 255, 0.07);
+  --ghost-bg-hover: rgba(255, 255, 255, 0.16);
+  --ghost-border: rgba(255, 255, 255, 0.28);
+  --ghost-border-hover: rgba(255, 255, 255, 0.5);
+  --ghost-text: #ffffff;
+  --ghost-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+
+  --tag-phero-text: #a8c3ff;
+  --tag-phero-bg: rgba(47, 116, 255, 0.16);
+  --tag-phero-border: rgba(47, 116, 255, 0.38);
 
   color-scheme: dark;
 }
@@ -315,12 +354,21 @@ input:focus-visible,
   margin-bottom: var(--space-sm);
 }
 
-/* Varian chip di atas section gelap (konstan): ikut bahasa aksen biru agar
-   konsisten dengan tag di section terang */
+/* Varian tag untuk latar SELALU GELAP (vision, stats-band): biru terang
+   yang tetap terbaca di atas hitam di kedua tema. Untuk page-hero yang
+   mengikuti tema, lihat override .page-hero .section-tag--light di bawah. */
 .section-tag--light {
   color: #a8c3ff;
   background-color: rgba(47, 116, 255, 0.16);
   border-color: rgba(47, 116, 255, 0.38);
+}
+
+/* Di page-hero (latar mengikuti tema), tag memakai versi tematis:
+   terang = biru pekat di latar putih, gelap = biru pucat di latar hitam */
+.page-hero .section-tag--light {
+  color: var(--tag-phero-text);
+  background-color: var(--tag-phero-bg);
+  border-color: var(--tag-phero-border);
 }
 
 .section-title {
@@ -383,20 +431,36 @@ input:focus-visible,
   box-shadow: 0 18px 38px var(--accent-glow);
 }
 
-/* Ghost: dipakai di atas latar gelap — dibuat seperti kaca agar terbaca
-   sebagai tombol (bukan sekadar garis tipis), tetap jadi aksi sekunder. */
+/* Ghost: tombol kaca. Versi dasar untuk latar TERANG (page-hero mengikuti
+   tema); di atas section yang selalu gelap dipakai varian putih di bawah. */
 .btn--ghost {
-  background-color: rgba(255, 255, 255, 0.07);
-  color: var(--dark-heading);
-  border: 1px solid rgba(255, 255, 255, 0.28);
+  background-color: var(--ghost-bg);
+  color: var(--ghost-text);
+  border: 1px solid var(--ghost-border);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 }
 
 .btn--ghost:hover {
+  background-color: var(--ghost-bg-hover);
+  border-color: var(--ghost-border-hover);
+  transform: translateY(-3px);
+  box-shadow: var(--ghost-shadow);
+}
+
+/* Di atas section yang SELALU gelap (CTA band, halaman 404), tombol kaca
+   tetap versi putih di kedua tema — latar sectionnya tidak pernah terang. */
+.cta-band .btn--ghost,
+.notfound .btn--ghost {
+  background-color: rgba(255, 255, 255, 0.07);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
+.cta-band .btn--ghost:hover,
+.notfound .btn--ghost:hover {
   background-color: rgba(255, 255, 255, 0.16);
   border-color: rgba(255, 255, 255, 0.5);
-  transform: translateY(-3px);
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
 }
 
@@ -1860,15 +1924,18 @@ html.theme-anim .vision::after {
   color: var(--text-muted);
 }
 
-/* --- Page hero: dipakai semua halaman selain Beranda --- */
+/* --- Page hero: dipakai semua halaman selain Beranda ---
+   Mengikuti tema (terang default, gelap saat toggle) via token --phero-*:
+   mood-nya kini konsisten dengan beranda yang sudah terang. */
 .page-hero {
   position: relative;
   overflow: hidden;
-  background: var(--dark-bg);
+  background: var(--phero-bg);
+  border-bottom: 1px solid var(--border);
   padding: var(--space-xl) var(--space-sm);
 }
 
-/* Pijar abu di sudut (dekoratif, konstan) */
+/* Pijar aksen di sudut (dekoratif, ikut tema) */
 .page-hero::after {
   content: '';
   position: absolute;
@@ -1877,7 +1944,7 @@ html.theme-anim .vision::after {
   width: 360px;
   height: 360px;
   border-radius: 50%;
-  background: var(--dark-glow-a);
+  background: var(--phero-glow);
   pointer-events: none;
 }
 
@@ -1898,7 +1965,7 @@ html.theme-anim .vision::after {
   align-items: center;
   gap: 0.4rem;
   font-size: 0.82rem;
-  color: var(--dark-text-faint);
+  color: var(--phero-text-faint);
 }
 
 .page-hero__breadcrumb a {
@@ -1906,7 +1973,7 @@ html.theme-anim .vision::after {
 }
 
 .page-hero__breadcrumb a:hover {
-  color: var(--dark-heading);
+  color: var(--accent-ink);
 }
 
 .page-hero__breadcrumb .icon {
@@ -1916,13 +1983,13 @@ html.theme-anim .vision::after {
 }
 
 .page-hero__title {
-  color: var(--dark-heading);
+  color: var(--phero-heading);
   font-size: clamp(1.85rem, 5.2vw, 3rem);
   max-width: 24ch;
 }
 
 .page-hero__lead {
-  color: var(--dark-text-faint);
+  color: var(--phero-text);
   max-width: 64ch;
 }
 
@@ -1931,7 +1998,7 @@ html.theme-anim .vision::after {
   flex-wrap: wrap;
   gap: 0.4rem 1.1rem;
   font-size: 0.85rem;
-  color: var(--dark-text-faint);
+  color: var(--phero-text-faint);
 }
 
 .page-hero__meta span {
@@ -2819,6 +2886,10 @@ html.is-animating #swup {
    ========================================================================== */
 html.theme-anim .section,
 html.theme-anim .page-hero,
+html.theme-anim .page-hero__title,
+html.theme-anim .page-hero__lead,
+html.theme-anim .page-hero__breadcrumb,
+html.theme-anim .btn--ghost,
 html.theme-anim .card,
 html.theme-anim .card__icon,
 html.theme-anim .chip,

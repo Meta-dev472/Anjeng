@@ -198,8 +198,8 @@ tetap terlihat. `prefers-reduced-motion` selalu menampilkan konten tanpa animasi
 - Skrip inline di `init.html` (di `@include` dalam `<head>`) mencegah kedipan tema; `theme.js`
   memakai **event delegation** pada `document` supaya toggle tetap hidup walau modul lain gagal.
 - Saat mengganti tema, `theme.js` juga memperbarui `<meta name="theme-color">`.
-- Nilai statis `theme-color` di sebagian halaman masih `#0a0a0a` (warisan tema gelap lama);
-  nilainya diperbaiki saat runtime. Aman diperbarui menjadi `#ffffff` kalau sedang mengedit halaman itu.
+- Nilai statis `theme-color` di semua halaman sudah `#ffffff` (default terang); runtime yang
+  menggantinya saat toggle.
 
 ### 5.6 Navigasi (header partial)
 `src/partials/header.html` dipakai **semua** halaman — perubahan di sana berdampak ke 17 file.
@@ -277,7 +277,7 @@ Template minimum `halaman/index.html`:
   <!-- OG + Twitter: salin dari halaman lain, gunakan %PAGE_URL% -->
   <meta name="theme-color" content="#ffffff">
 
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" type="image/png" href="/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
@@ -330,9 +330,11 @@ Plus Jakarta Sans, dan font link memuat `Plus+Jakarta+Sans`.
 3. **Semua foto** masih slot. Taruh foto asli di `public/foto/`.
 4. **Domain asli** di `.env` (`VITE_SITE_URL`) — memengaruhi canonical, OG, `sitemap.xml`, `robots.txt`.
 5. **`og:image`** belum dipasang karena berkasnya belum ada.
-6. **Favicon** masih monogram "OT" (`public/favicon.svg`), sedangkan logo OSIS sudah ada di `public/logo.png`.
-7. **Angka `120+`** di statistik hero adalah contoh.
-8. **Tautan sosial** (`Instagram`/`TikTok`/`YouTube`) masih `href="#"`.
+6. **Angka `120+`** di statistik hero adalah contoh.
+7. **Tautan sosial** (`Instagram`/`TikTok`/`YouTube`) masih `href="#"`.
+
+(Favicon sudah diganti dari monogram "OT" menjadi `public/favicon.png` yang dibuat dari
+`public/logo.png`; jika logo berganti, regenerasi favicon dari logo baru itu.)
 
 ---
 
