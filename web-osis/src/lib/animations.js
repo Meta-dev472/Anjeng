@@ -33,6 +33,10 @@ export function preparePageAnimations(root = document) {
 
   const intro = root.querySelectorAll('[data-intro]');
   if (intro.length) gsap.set(intro, { opacity: 0, y: 26 });
+
+  // Media foto: kondisi awal zoom-out + transparan (direveal saat discroll)
+  const revealImgs = root.querySelectorAll('[data-reveal-img]');
+  if (revealImgs.length) gsap.set(revealImgs, { opacity: 0, scale: 0.88 });
 }
 
 /* --------------------------------------------------------------------------
@@ -77,6 +81,19 @@ export function playPageAnimations(root = document) {
       ease: 'power3.out',
       stagger: 0.12,
       scrollTrigger: { trigger: group, start: 'top 85%', once: true },
+    });
+  });
+
+  // 2b. Reveal media foto: zoom-in halus + fade saat masuk viewport.
+  //     Transform pada ELEMEN MEDIA (bukan kartunya) agar tidak bentrok
+  //     dengan efek hover scale yang juga menganimasikan elemen itu.
+  root.querySelectorAll('[data-reveal-img]').forEach((el) => {
+    gsap.to(el, {
+      opacity: 1,
+      scale: 1,
+      duration: 1.1,
+      ease: 'power2.out',
+      scrollTrigger: { trigger: el, start: 'top 92%', once: true },
     });
   });
 
@@ -213,11 +230,14 @@ export function forceRevealAll() {
   // opacity ditulis eksplisit (1), bukan sekadar clearProps: aturan CSS
   // anti-kedip menyembunyikan elemen ini dan hanya inline style yang
   // bisa mengalahkannya.
-  gsap.set('[data-reveal], [data-intro], [data-reveal-stagger] > *', {
+  gsap.set('[data-reveal], [data-intro], [data-reveal-stagger] > *, [data-reveal-img]', {
     opacity: 1,
     y: 0,
     clearProps: 'transform',
   });
+
+  // Media foto reveal: kembalikan skala juga
+  gsap.set('[data-reveal-img]', { scale: 1 });
 
   // Angka beranimasi juga dihentikan di nilai akhirnya
   document.querySelectorAll('[data-count]').forEach((node) => {

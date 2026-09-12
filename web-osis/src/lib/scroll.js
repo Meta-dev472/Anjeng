@@ -61,6 +61,38 @@ export function setScrollLock(locked) {
 }
 
 // --------------------------------------------------------------------------
+// PROGRESS BAR SCROLL — garis tipis di tepi atas yang terisi mengikuti
+// kemajuan gulir. Dibuat sekali, hidup selama sesi (header tidak ikut
+// ditukar Swup, elemen ini pun tidak perlu dibuang per halaman).
+// --------------------------------------------------------------------------
+let progressBar = null;
+
+export function initScrollProgress() {
+  if (progressBar) return;
+
+  const wrap = document.createElement('div');
+  wrap.className = 'scroll-progress';
+  wrap.setAttribute('aria-hidden', 'true');
+  wrap.innerHTML = '<span class="scroll-progress__bar"></span>';
+  document.body.appendChild(wrap);
+
+  progressBar = wrap.firstChild;
+
+  const sync = () => {
+    // max bisa 0 di halaman yang pendeknya lebih dari satu layar
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = max > 0 ? Math.min(window.scrollY / max, 1) : 1;
+    progressBar.style.transform = `scaleX(${progress})`;
+  };
+
+  sync();
+  // Ikut aliran Lenis bila ada; fallback ke scroll native
+  if (lenis) lenis.on('scroll', sync);
+  else window.addEventListener('scroll', sync, { passive: true });
+  window.addEventListener('resize', sync, { passive: true });
+}
+
+// --------------------------------------------------------------------------
 // HEADER — makin solid setelah halaman di-scroll
 // --------------------------------------------------------------------------
 export function initHeaderState() {

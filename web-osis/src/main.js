@@ -23,6 +23,7 @@ import {
   initSmoothScroll,
   initHeaderState,
   initAnchorLinks,
+  initScrollProgress,
   jumpToTop,
   glideToTop,
 } from './lib/scroll.js';
@@ -48,6 +49,7 @@ initTheme();
 // --------------------------------------------------------------------------
 safeInit('smooth-scroll', initSmoothScroll);
 safeInit('anchor-links', initAnchorLinks);
+safeInit('scroll-progress', initScrollProgress);
 
 // --------------------------------------------------------------------------
 // 3. NAVIGASI — drawer, dropdown Proker, penanda halaman aktif

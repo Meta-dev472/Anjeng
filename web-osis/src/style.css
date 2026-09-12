@@ -483,6 +483,32 @@ input:focus-visible,
 }
 
 /* ==========================================================================
+   4b. PROGRESS BAR SCROLL
+   Garis tipis di tepi atas viewport yang terisi mengikuti kemajuan gulir —
+   umpan balik posisi di halaman yang panjang. Digerakkan Lenis (lihat
+   initScrollProgress di src/lib/scroll.js).
+   ========================================================================== */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  /* Di atas header (1000), di bawah layer drawer (1090) */
+  z-index: 1005;
+  pointer-events: none;
+}
+
+.scroll-progress__bar {
+  display: block;
+  height: 100%;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: left center;
+  background: linear-gradient(90deg, var(--accent), var(--accent-red));
+}
+
+/* ==========================================================================
    5. HEADER / NAVBAR (Sticky glass — mengikuti tema)
    ========================================================================== */
 .header {
@@ -1030,13 +1056,24 @@ input:focus-visible,
   transition: transform 0.5s ease;
 }
 
-/* Pengisi sementara: arsir diagonal halus sampai foto asli dipasang */
+/* Pengisi sementara: arsir diagonal halus sampai foto asli dipasang.
+   Elemen beranimasi reveal (zoom halus saat masuk viewport) — kondisi awal
+   dipegang GSAP lewat data-reveal-img, jadi tidak ada kedipan. */
 .hero__tile-media {
   background-image: repeating-linear-gradient(
     135deg,
     var(--hero-border) 0 1px,
     transparent 1px 10px
   );
+}
+
+.hero__tile-media,
+.hero__tile img,
+.frame__media,
+.frame img,
+.photo__media,
+.photo img {
+  will-change: transform;
 }
 
 .hero__tile-label {
@@ -1069,9 +1106,11 @@ input:focus-visible,
   margin-top: var(--space-xs);
 }
 
-/* Kartu terakhir melebar penuh saat grid masih 2 kolom, supaya tidak ada
-   kolom kosong di ponsel (direset ke otomatis pada layar >= 768px) */
-.hero__stat:last-child {
+/* Kartu "Program kerja aktif" (urutan kedua) melebar penuh di baris kedua,
+   jadi di ponsel ketiga kartu tersusun 2 + 1 tanpa kolom kosong. `order`
+   menjaga baris pertama tetap terisi dua kartu (anggota & ekskul). */
+.hero__stat:nth-child(2) {
+  order: 3;
   grid-column: 1 / -1;
 }
 
@@ -1129,6 +1168,16 @@ input:focus-visible,
   border-color: var(--accent-ring);
   background-color: var(--bg);
   box-shadow: var(--hero-shadow-soft);
+}
+
+/* Baris grid masih 2 kolom (ponsel): kartu yang melebar penuh dibedakan —
+   ikon & angka berdampingan agar tidak terlihat kosong memanjang.
+   Hanya berlaku di tampilan sempit; ≥768px kartu kembali seragam. */
+@media (max-width: 767.98px) {
+  .hero__stat:nth-child(2) {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+  }
 }
 
 .hero__stat:hover .hero__stat-icon {
@@ -3553,8 +3602,9 @@ html.theme-anim .btn--outline-red {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
-  /* Kartu terakhir kembali ke lebar normal saat grid sudah 3 kolom */
-  .hero__stat:last-child {
+  /* Kartu tengah kembali ke lebar & urutan normal saat grid sudah 3 kolom */
+  .hero__stat:nth-child(2) {
+    order: 0;
     grid-column: auto;
   }
 
@@ -3611,6 +3661,12 @@ html.theme-anim .btn--outline-red {
   .hero__stat:hover .hero__stat-icon,
   .hero__tile:hover .hero__tile-media,
   .hero__tile:hover img {
+    transform: none;
+  }
+
+  /* Reveal foto juga dinonaktifkan: langsung tampil utuh */
+  [data-reveal-img] {
+    opacity: 1;
     transform: none;
   }
 

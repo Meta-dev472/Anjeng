@@ -88,6 +88,11 @@ function renderLightbox() {
     media.className = 'photo__media photo__media--empty';
   }
   media.removeAttribute?.('id');
+  // Clone bisa membawa warisan animasi reveal (attribute + gaya inline
+  // opacity/scale dari GSAP). Bersihkan agar foto tampil utuh di lightbox.
+  media.removeAttribute?.('data-reveal-img');
+  media.style?.removeProperty('opacity');
+  media.style?.removeProperty('transform');
 
   mediaBox.replaceChildren(media);
 
