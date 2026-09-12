@@ -820,17 +820,64 @@ input:focus-visible,
    bukan terkubur di bawah statistik + galeri. Urutan visual diatur lewat
    `order` agar markup tetap apa adanya; desktop ikut urutan ini juga
    (tombol setelah deskripsi memang posisi hierarkisnya yang benar). */
+.hero__event-badge { order: 0; }
 .hero__eyebrow { order: 1; }
 .hero__headline { order: 2; }
 .hero__subtext { order: 3; }
 .hero__actions { order: 4; }
-.hero__stats { order: 5; }
-.hero__gallery { order: 6; }
-.hero__copy > .btn--link { order: 7; }
-.hero__scroll { order: 8; }
+.hero__micro-metrics { order: 5; }
+.hero__stats { order: 6; }
+.hero__gallery { order: 7; }
+.hero__copy > .btn--link { order: 8; }
+.hero__scroll { order: 9; }
 
 /* (Penumpukan CTA di ponsel diatur langsung pada .hero__actions di bawah;
    kembali berdampingan mulai tablet — lihat media query 768px, bagian 26b) */
+
+/* Badge event di atas eyebrow: menandai agenda terbaru, memenuhi ruang
+   kosong bagian atas hero dan membuat header terasa aktif */
+.hero__event-badge {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.6rem;
+  padding: 0.5rem 0.95rem;
+  border: 1px solid var(--accent-ring);
+  border-radius: 999px;
+  background-color: var(--accent-soft);
+  color: var(--accent-ink);
+  font-size: 0.8rem;
+  line-height: 1.35;
+  transition: background-color 0.3s ease, border-color 0.3s ease,
+    transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hero__event-badge strong {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.hero__event-badge .icon {
+  width: 15px;
+  height: 15px;
+}
+
+.hero__event-badge:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+  background-color: var(--bg);
+  box-shadow: var(--hero-shadow-soft);
+}
+
+.hero__event-badge:hover .hero__event-arrow {
+  transform: translateX(3px);
+}
+
+.hero__event-arrow {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.3s ease;
+}
 
 /* Label kecil dengan garis tipis di depannya — aksen editorial */
 .hero__eyebrow {
@@ -842,6 +889,44 @@ input:focus-visible,
   font-size: 0.75rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
+}
+
+/* --- Mini metrics di bawah tombol: kredibilitas instan --- */
+.hero__micro-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 1.4rem;
+}
+
+.hero__metric {
+  display: flex;
+  align-items: baseline;
+  gap: 0.45rem;
+}
+
+.hero__metric-number {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: var(--accent-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.hero__metric-label {
+  font-size: 0.82rem;
+  color: var(--hero-text-faint);
+}
+
+/* Pemisah titik antar metrik (kecuali terakhir) */
+.hero__metric:not(:last-child)::after {
+  content: '';
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: var(--hero-border);
+  margin-left: 1.4rem;
+  align-self: center;
 }
 
 .hero__eyebrow::before {
@@ -861,8 +946,10 @@ input:focus-visible,
   text-wrap: balance;
 }
 
-/* Kata kunci diberi warna aksen (menggantikan italic serif lama):
-   biru untuk “bergerak”, merah untuk “berkarya”, biru untuk “berdampak”. */
+/* Kata kunci diberi warna aksen: biru untuk “bergerak”, merah untuk
+   “berkarya”, biru untuk “berdampak”. “Berkarya” diberi garis bawah
+   hand-drawn (SVG wavy) agar tombol merah tidak lagi satu-satunya
+   elemen merah — dua aksen menyatu sebagai satu bahasa warna. */
 .hero__headline-accent {
   font-style: normal;
   color: var(--accent-ink);
@@ -870,6 +957,19 @@ input:focus-visible,
 
 .hero__headline-accent--red {
   color: var(--accent-red-ink);
+  position: relative;
+  white-space: nowrap;
+}
+
+.hero__headline-accent--red::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.14em;
+  height: 0.16em;
+  background: var(--accent-red-soft);
+  border-radius: 999px;
 }
 
 .hero__subtext {
@@ -920,16 +1020,16 @@ input:focus-visible,
     var(--hero-visual-bg);
 }
 
+/* Watermark logo OSIS (bukan lagi monogram teks “OT”): di-mask dari
+   public/logo.png sehingga ikut warna token dan tetap elegan di atas
+   gradasi. Ganti logo di public/logo.png → watermark ikut berubah. */
 .hero__visual-media::before {
-  content: 'OT';
+  content: '';
   position: absolute;
-  top: -0.12em;
-  right: -0.04em;
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: clamp(6rem, 15vw, 10.5rem);
-  line-height: 1;
-  color: var(--hero-visual-mark);
+  inset: 0;
+  background-color: var(--hero-visual-mark);
+  -webkit-mask: url('/logo.png') center / min(58%, 240px) no-repeat;
+  mask: url('/logo.png') center / min(58%, 240px) no-repeat;
 }
 
 .hero__visual-media::after {
@@ -1817,6 +1917,8 @@ html.theme-anim .proker-card,
 html.theme-anim .proker-card__icon,
 html.theme-anim .hero,
 html.theme-anim .hero__decoration,
+html.theme-anim .hero__event-badge,
+html.theme-anim .hero__metric-number,
 html.theme-anim .hero__gallery-head .icon,
 html.theme-anim .vision::before,
 html.theme-anim .vision::after {
@@ -3376,18 +3478,22 @@ html.theme-anim .header__subnav-link {
   box-shadow: 0 14px 30px var(--accent-glow);
 }
 
-/* Tombol garis MERAH — aksi aspirasi (penekanan sekunder) */
+/* Tombol garis MERAH — aksi aspirasi. Diberi latar tint + border lebih
+   tegas agar tidak tenggelam di samping tombol primer biru; hover mengisi
+   penuh merah sebagai penegasan aksi. */
 .btn--outline-red {
   border: 1px solid var(--accent-red-ring);
   color: var(--accent-red-ink);
-  background-color: transparent;
+  background-color: var(--accent-red-soft);
+  font-weight: 600;
 }
 
 .btn--outline-red:hover {
-  background-color: var(--accent-red-soft);
+  background-color: var(--accent-red);
   border-color: var(--accent-red);
+  color: #ffffff;
   transform: translateY(-3px);
-  box-shadow: 0 14px 30px var(--accent-red-soft);
+  box-shadow: 0 14px 30px var(--accent-red-ring);
 }
 
 /* Tautan aksi tersier — tanpa kotak, tapi tetap terasa bisa diklik */
@@ -3659,6 +3765,7 @@ html.theme-anim .btn--outline-red {
   /* Micro-interaction kartu mati, tapi informasi tetap utuh */
   .hero__stat:hover,
   .hero__stat:hover .hero__stat-icon,
+  .hero__event-badge:hover,
   .hero__tile:hover .hero__tile-media,
   .hero__tile:hover img {
     transform: none;
