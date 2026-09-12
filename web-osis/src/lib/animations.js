@@ -47,9 +47,13 @@ export function playPageAnimations(root = document) {
     introTween = gsap.to(intro, {
       opacity: 1,
       y: 0,
-      duration: 0.85,
+      duration: 0.8,
       ease: 'power3.out',
-      stagger: 0.1,
+      // Hero beranda kini memuat lebih banyak elemen berurutan (eyebrow →
+      // judul → deskripsi → statistik → galeri → tombol), jadi jeda antar
+      // elemen diperkecil agar rangkaiannya selesai sebelum pengguna mulai
+      // membaca isi — 0.1s per elemen terasa lambat di halaman panjang.
+      stagger: 0.08,
       delay: 0.04,
     });
   }

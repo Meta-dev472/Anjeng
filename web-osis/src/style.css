@@ -277,6 +277,16 @@ button {
   color: inherit;
 }
 
+/* Aksesibilitas: ring fokus konsisten untuk navigasi keyboard.
+   :focus-visible (bukan :focus) supaya klik mouse tidak menampilkan ring. */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
 /* ==========================================================================
    3. IKON SVG (Lucide) — kelas dasar
    ========================================================================== */
@@ -305,11 +315,12 @@ button {
   margin-bottom: var(--space-sm);
 }
 
-/* Varian chip di atas section gelap (konstan) */
+/* Varian chip di atas section gelap (konstan): ikut bahasa aksen biru agar
+   konsisten dengan tag di section terang */
 .section-tag--light {
-  color: var(--dark-text);
-  background-color: var(--dark-glass);
-  border-color: var(--dark-border);
+  color: #a8c3ff;
+  background-color: rgba(47, 116, 255, 0.16);
+  border-color: rgba(47, 116, 255, 0.38);
 }
 
 .section-title {
@@ -1644,6 +1655,7 @@ html.theme-anim .proker-card,
 html.theme-anim .proker-card__icon,
 html.theme-anim .hero,
 html.theme-anim .hero__decoration,
+html.theme-anim .hero__gallery-head .icon,
 html.theme-anim .vision::before,
 html.theme-anim .vision::after {
   transition: background-color 0.45s ease, background 0.45s ease,
@@ -2346,15 +2358,30 @@ html.theme-anim .vision::after {
 }
 
 .photo__media {
+  position: relative;
   display: block;
   width: 100%;
   aspect-ratio: 4 / 3;
   background-color: var(--surface-raised);
-  background-image: repeating-linear-gradient(
-    135deg,
-    var(--border) 0 1px,
-    transparent 1px 14px
-  );
+  background-image: radial-gradient(90% 90% at 50% 40%, var(--accent-soft), transparent 72%),
+    repeating-linear-gradient(135deg, var(--border) 0 1px, transparent 1px 14px);
+}
+
+/* Penanda “slot foto”: ikon kamera samar di tengah. Hilang otomatis begitu
+   span diganti <img> asli — tanpa perubahan kode apa pun. */
+.photo__media::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 34px;
+  height: 34px;
+  translate: -50% -50%;
+  opacity: 0.4;
+  pointer-events: none;
+  background-color: var(--accent-ink);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%23000'%20stroke-width='2'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='M13.997%204a2%202%200%200%201%201.76%201.05l.486.9A2%202%200%200%200%2018.003%207H20a2%202%200%200%201%202%202v9a2%202%200%200%201-2%202H4a2%202%200%200%201-2-2V9a2%202%200%200%201%202-2h1.997a2%202%200%200%200%201.759-1.048l.489-.904A2%202%200%200%201%2010.004%204z'/%3E%3Ccircle%20cx='12'%20cy='13'%20r='3'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%23000'%20stroke-width='2'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='M13.997%204a2%202%200%200%201%201.76%201.05l.486.9A2%202%200%200%200%2018.003%207H20a2%202%200%200%201%202%202v9a2%202%200%200%201-2%202H4a2%202%200%200%201-2-2V9a2%202%200%200%201%202-2h1.997a2%202%200%200%200%201.759-1.048l.489-.904A2%202%200%200%201%2010.004%204z'/%3E%3Ccircle%20cx='12'%20cy='13'%20r='3'/%3E%3C/svg%3E") center / contain no-repeat;
 }
 
 .photo img {
@@ -3020,14 +3047,27 @@ html.theme-anim .header__subnav-link {
 }
 
 .frame__media {
+  position: relative;
   display: block;
   width: 100%;
   aspect-ratio: 4 / 3;
-  background-image: repeating-linear-gradient(
-    135deg,
-    var(--border) 0 1px,
-    transparent 1px 14px
-  );
+  background-image: radial-gradient(90% 90% at 50% 40%, var(--accent-soft), transparent 72%),
+    repeating-linear-gradient(135deg, var(--border) 0 1px, transparent 1px 14px);
+}
+
+.frame__media::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 40px;
+  height: 40px;
+  translate: -50% -50%;
+  opacity: 0.4;
+  pointer-events: none;
+  background-color: var(--accent-ink);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%23000'%20stroke-width='2'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='M13.997%204a2%202%200%200%201%201.76%201.05l.486.9A2%202%200%200%200%2018.003%207H20a2%202%200%200%201%202%202v9a2%202%200%200%201-2%202H4a2%202%200%200%201-2-2V9a2%202%200%200%201%202-2h1.997a2%202%200%200%200%201.759-1.048l.489-.904A2%202%200%200%201%2010.004%204z'/%3E%3Ccircle%20cx='12'%20cy='13'%20r='3'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%23000'%20stroke-width='2'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='M13.997%204a2%202%200%200%201%201.76%201.05l.486.9A2%202%200%200%200%2018.003%207H20a2%202%200%200%201%202%202v9a2%202%200%200%201-2%202H4a2%202%200%200%201-2-2V9a2%202%200%200%201%202-2h1.997a2%202%200%200%200%201.759-1.048l.489-.904A2%202%200%200%201%2010.004%204z'/%3E%3Ccircle%20cx='12'%20cy='13'%20r='3'/%3E%3C/svg%3E") center / contain no-repeat;
 }
 
 .frame img {
@@ -3340,7 +3380,7 @@ html.theme-anim .header__subnav-link {
 
 .index__item:hover .index__num,
 .index__item:hover .index__arrow {
-  color: var(--heading);
+  color: var(--accent-ink);
 }
 
 .index__item:hover .index__arrow {
@@ -3348,6 +3388,9 @@ html.theme-anim .header__subnav-link {
 }
 
 /* Komponen baru ikut bertransisi halus saat ganti tema */
+html.theme-anim .section-tag--light,
+html.theme-anim .photo__media,
+html.theme-anim .frame__media,
 html.theme-anim .frame,
 html.theme-anim .frame__media,
 html.theme-anim .showcase__item,
