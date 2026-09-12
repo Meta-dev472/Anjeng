@@ -162,6 +162,9 @@
   --tag-phero-bg: rgba(30, 102, 245, 0.08);
   --tag-phero-border: rgba(30, 102, 245, 0.26);
 
+  /* Peredup di belakang drawer mobile saat terbuka */
+  --scrim: rgba(15, 23, 42, 0.44);
+
   color-scheme: light;
 }
 
@@ -247,6 +250,8 @@
   --tag-phero-text: #a8c3ff;
   --tag-phero-bg: rgba(47, 116, 255, 0.16);
   --tag-phero-border: rgba(47, 116, 255, 0.38);
+
+  --scrim: rgba(0, 0, 0, 0.6);
 
   color-scheme: dark;
 }
@@ -652,8 +657,12 @@ input:focus-visible,
   gap: var(--space-sm);
 }
 
+/* Target sentuh nyaman (≥44px tinggi per menu) — hanya terasa di drawer;
+   navbar desktop memakai ulang ukurannya sendiri di media query ≥1024px */
 .header__nav-link {
-  display: block;
+  display: flex;
+  align-items: center;
+  min-height: 44px;
   font-weight: 500;
   color: var(--heading);
   padding: 0.6rem 0;
@@ -668,8 +677,7 @@ input:focus-visible,
 
 .header__nav-link--cta {
   margin-top: var(--space-xs);
-  text-align: center;
-  /* Senada dengan tombol CTA di navbar desktop: aksen biru */
+  justify-content: center; /* teks tombol di tengah (elementnya flex) */
   background-color: var(--accent);
   color: var(--on-accent);
   border-radius: var(--radius-sm);
@@ -687,6 +695,25 @@ input:focus-visible,
 /* Layer menyerap klik di area luar panel agar tap tidak menembus ke halaman */
 .header__nav-toggle-input:checked ~ .header__nav-layer {
   pointer-events: auto;
+}
+
+/* Peredup (scrim) di belakang drawer: memberi kedalaman visual dan
+   menegaskan bahwa area di luar panel sedang tidak aktif */
+.header__nav-toggle-input:checked ~ .header__nav-layer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: var(--scrim);
+  animation: nav-scrim-in 0.35s ease both;
+}
+
+@keyframes nav-scrim-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .header__nav-toggle-input:checked ~ .header__nav-layer .header__nav {
@@ -763,6 +790,22 @@ input:focus-visible,
   justify-items: start;
 }
 
+/* Hierarki mobile: tombol CTA harus segera terlihat setelah deskripsi —
+   bukan terkubur di bawah statistik + galeri. Urutan visual diatur lewat
+   `order` agar markup tetap apa adanya; desktop ikut urutan ini juga
+   (tombol setelah deskripsi memang posisi hierarkisnya yang benar). */
+.hero__eyebrow { order: 1; }
+.hero__headline { order: 2; }
+.hero__subtext { order: 3; }
+.hero__actions { order: 4; }
+.hero__stats { order: 5; }
+.hero__gallery { order: 6; }
+.hero__copy > .btn--link { order: 7; }
+.hero__scroll { order: 8; }
+
+/* (Penumpukan CTA di ponsel diatur langsung pada .hero__actions di bawah;
+   kembali berdampingan mulai tablet — lihat media query 768px, bagian 26b) */
+
 /* Label kecil dengan garis tipis di depannya — aksen editorial */
 .hero__eyebrow {
   display: inline-flex;
@@ -770,7 +813,7 @@ input:focus-visible,
   gap: 0.7rem;
   color: var(--hero-text-faint);
   font-weight: 500;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
 }
@@ -810,10 +853,13 @@ input:focus-visible,
   max-width: 48ch;
 }
 
+/* Di ponsel: dua CTA dipenuhi lebar & ditumpuk — rapi dan mudah disentuh.
+   Kembali berdampingan mulai tablet (media query 768px, bagian 26b). */
 .hero__actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-xs);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.6rem;
+  width: 100%;
   margin-top: var(--space-xs);
 }
 
@@ -943,7 +989,7 @@ input:focus-visible,
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 0.7rem;
+  font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -1000,7 +1046,7 @@ input:focus-visible,
   right: 0;
   bottom: 0;
   padding: 0.45rem 0.55rem 0.4rem;
-  font-size: 0.66rem;
+  font-size: 0.74rem;
   font-weight: 600;
   color: #ffffff;
   background: linear-gradient(to top, rgba(9, 14, 28, 0.85), transparent);
@@ -1074,7 +1120,7 @@ input:focus-visible,
 
 .hero__stat-label {
   color: var(--hero-text-faint);
-  font-size: 0.76rem;
+  font-size: 0.8rem;
   line-height: 1.35;
 }
 
@@ -1744,10 +1790,8 @@ html.theme-anim .vision::after {
     padding: var(--space-2xl) var(--space-lg) var(--space-2xl);
   }
 
-  .hero__actions {
-    flex-direction: row;
-    justify-content: center;
-  }
+  /* (CTA hero berdampingan diatur di bagian 26b — aturan lama di sini
+     sudah tidak berlaku sejak penumpukan mobile memakai grid) */
 
   .profile__container {
     flex-direction: row;
@@ -3490,6 +3534,18 @@ html.theme-anim .btn--outline-red {
     grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
     align-items: start;
     gap: var(--space-lg);
+  }
+
+  /* CTA hero kembali berdampingan & otos lebar isinya begitu ruang cukup */
+  .hero__actions {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: auto;
+  }
+
+  .hero__actions .btn {
+    width: auto;
   }
 
   /* Statistik hero jadi 3 kolom begitu ruangnya cukup (ponsel: 2 kolom) */
