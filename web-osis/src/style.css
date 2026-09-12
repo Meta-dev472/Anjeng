@@ -1217,6 +1217,13 @@ input:focus-visible,
   line-height: 1.35;
 }
 
+/* Kartu "18 Angkatan": angkanya digeser sedikit ke kiri di dalam box
+   agar optis sejajar dengan kartu lain (angka dua digit terlihat lebih
+   maju daripada satu digit bila dibiarkan rata kiri yang sama) */
+.hero__stat:nth-child(3) .hero__stat-number {
+  margin-left: -0.22rem;
+}
+
 .hero__stat:hover {
   transform: translateY(-4px);
   border-color: var(--accent-ring);

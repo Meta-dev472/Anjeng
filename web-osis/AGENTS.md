@@ -24,7 +24,7 @@ database) berisi 16 halaman + 404 yang terasa seperti SPA.
 | Deploy | Netlify (lihat `netlify.toml`); tidak butuh rewrite apa pun |
 
 Data statistik yang **tidak boleh diubah tanpa diminta**: `120+` Anggota aktif, `10+` Program
-kerja aktif, `4` Ekstrakurikuler terintegrasi.
+kerja aktif, `18` Angkatan (angka `120+` masih contoh; lihat juga mini metrics di hero).
 
 ---
 
