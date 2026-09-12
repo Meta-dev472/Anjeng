@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="id" data-page="beranda">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>OSIS SMK Texar Karawang | Website Resmi</title>
+  <meta name="description" content="Website resmi OSIS SMK Texar Karawang — profil, visi misi, program kerja, struktur pengurus, galeri kegiatan, dan berita terbaru.">
+  <link rel="canonical" href="%PAGE_URL%">
+
+  <!-- Open Graph & Twitter Card -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="OSIS SMK Texar Karawang">
+  <meta property="og:locale" content="id_ID">
+  <meta property="og:title" content="OSIS SMK Texar Karawang | Website Resmi">
+  <meta property="og:description" content="Wadah aspirasi, kreativitas, dan kepemimpinan siswa-siswi SMK Texar Karawang.">
+  <meta property="og:url" content="%PAGE_URL%">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="OSIS SMK Texar Karawang">
+  <meta name="twitter:description" content="Wadah aspirasi, kreativitas, dan kepemimpinan siswa-siswi SMK Texar Karawang.">
+  <meta name="theme-color" content="#ffffff">
+
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+
+  <!-- Google Fonts
+       - Plus Jakarta Sans: judul Beranda (sans-serif modern, menggantikan
+         Instrument Serif) sekaligus heading halaman lain
+       - Inter: teks isi & label -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tema awal (anti-flash) + penanda JS aktif + pengalihan tautan # lama -->
+  <!-- @include init.html -->
+
+  <!-- Vite entry: CSS di-import lewat src/main.js -->
+  <script type="module" src="/src/main.js"></script>
+</head>
+<body>
+  <!-- Icons: Lucide (https://lucide.dev) — ISC License -->
+
+  <!-- @include header.html -->
+
+  <!-- Kontainer yang ditukar Swup saat berpindah halaman -->
+  <main id="swup">
+
+    <!-- Semua gaya khusus Beranda dibatasi di dalam .home, supaya tipografi
+         halaman lain tetap memakai Poppins/Inter seperti sebelumnya. -->
+    <div class="home">
+
+      <!-- ==========================================================
+           HERO — permukaan terang: judul di kiri (kata kunci diberi warna
+           aksen) dan slot foto sinematik di kanan. Judul memakai Plus
+           Jakarta Sans — lihat bagian 26 di src/style.css.
+      =========================================================== -->
+      <section class="hero" id="beranda">
+        <div class="hero__container">
+
+          <div class="hero__copy">
+            <p class="hero__eyebrow" data-intro>Organisasi Siswa Intra Sekolah &middot; Periode 2026/2027</p>
+
+            <h1 class="hero__headline" data-intro>
+              Wadah bagi setiap siswa untuk <em class="hero__headline-accent">bergerak</em>,
+              <em class="hero__headline-accent hero__headline-accent--red">berkarya</em>, dan
+              <em class="hero__headline-accent">berdampak</em>.
+            </h1>
+
+            <p class="hero__subtext" data-intro>
+              OSIS SMK Texar Karawang menghimpun aspirasi, kreativitas, dan kepemimpinan siswa lewat program kerja nyata di empat pilar: akademik, seni, olahraga, dan sosial.
+            </p>
+
+            <!-- Kredibilitas singkat. Ikon: Lucide (users / calendar-check /
+                 trophy = komunitas, program kerja, prestasi).
+                 Angka 120+ adalah contoh — sesuaikan dengan jumlah anggota
+                 sebenarnya sebelum situs dipublikasikan. -->
+            <ul class="hero__stats" data-intro>
+              <li class="hero__stat">
+                <span class="hero__stat-icon" aria-hidden="true">
+                  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><path d="M16 3.128a4 4 0 0 1 0 7.744"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><circle cx="9" cy="7" r="4"/></svg>
+                </span>
+                <span class="hero__stat-number" data-count="120" data-count-suffix="+">120+</span>
+                <span class="hero__stat-label">Anggota aktif</span>
+              </li>
+              <li class="hero__stat">
+                <span class="hero__stat-icon" aria-hidden="true">
+                  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v3"/><path d="M16 2v3"/><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="m9 15 2 2 4-4"/></svg>
+                </span>
+                <span class="hero__stat-number" data-count="10" data-count-suffix="+">10+</span>
+                <span class="hero__stat-label">Program kerja aktif</span>
+              </li>
+              <li class="hero__stat">
+                <span class="hero__stat-icon" aria-hidden="true">
+                  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14.66V17a1 1 0 0 1-1 1 2 2 0 0 0-2 2v2"/><path d="M14 14.66V17a1 1 0 0 0 1 1 2 2 0 0 1 2 2v2"/><path d="M17.916 10H19.5A2.5 2.5 0 0 0 22 7.5V5a1 1 0 0 0-1-1h-3"/><path d="M4 22h16"/><path d="M6 9a6 6 0 0 0 12 0V3a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1z"/><path d="M6.084 10H4.5A2.5 2.5 0 0 1 2 7.5V5a1 1 0 0 1 1-1h3"/></svg>
+                </span>
+                <span class="hero__stat-number" data-count="4">4</span>
+                <span class="hero__stat-label">Ekstrakurikuler terintegrasi</span>
+              </li>
+            </ul>
+
+            <!-- Photo grid dokumentasi kegiatan, tepat di bawah deskripsi.
+                 Cara mengisi foto asli: ganti <span class="hero__tile-media">
+                 dengan <img src="/foto/nama-file.jpg" alt="..."> pada tiap
+                 kartu. Simpan berkas di public/foto/ agar ikut ter-build. -->
+            <div class="hero__gallery" data-intro>
+              <p class="hero__gallery-head">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.997 4a2 2 0 0 1 1.76 1.05l.486.9A2 2 0 0 0 18.003 7H20a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1.997a2 2 0 0 0 1.759-1.048l.489-.904A2 2 0 0 1 10.004 4z"/><circle cx="12" cy="13" r="3"/></svg>
+                Dokumentasi kegiatan
+              </p>
+              <div class="hero__gallery-grid">
+                <figure class="hero__tile">
+                  <span class="hero__tile-media" aria-hidden="true"></span>
+                  <figcaption class="hero__tile-label">Kelas tambahan</figcaption>
+                </figure>
+                <figure class="hero__tile">
+                  <span class="hero__tile-media" aria-hidden="true"></span>
+                  <figcaption class="hero__tile-label">Pentas seni</figcaption>
+                </figure>
+                <figure class="hero__tile">
+                  <span class="hero__tile-media" aria-hidden="true"></span>
+                  <figcaption class="hero__tile-label">Bakti sosial</figcaption>
+                </figure>
+              </div>
+            </div>
+
+            <!-- Dua aksi utama: biru (jelajah program) & garis merah
+                 (daftar aspirasi), plus satu tautan tersier ke Profil. -->
+            <div class="hero__actions" data-intro>
+              <a href="/proker/" class="btn btn--primary">
+                Jelajahi Program
+                <svg class="icon btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </a>
+              <a href="/kontak/" class="btn btn--outline-red">
+                Daftar Aspirasi
+                <svg class="icon btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></svg>
+              </a>
+            </div>
+
+            <a href="/profil/" class="btn btn--link" data-intro>
+              Kenali OSIS kami
+              <svg class="icon btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </a>
+
+            <a class="hero__scroll" href="#sorotan">
+              <span class="hero__scroll-icon" aria-hidden="true">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+              </span>
+              <span>Gulir ke sorotan</span>
+              <span class="hero__scroll-line" aria-hidden="true"></span>
+            </a>
+          </div>
+
+          <!-- Slot foto sinematik. Cara mengisi: ganti <span class="hero__visual-media">
+               dengan <img src="/foto/nama-file.jpg" alt="..."> — overlay gradasi
+               gelap dan caption di bawahnya tetap bekerja tanpa ubah apa pun. -->
+          <figure class="hero__visual" data-intro>
+            <span class="hero__visual-media" aria-hidden="true"></span>
+            <figcaption class="hero__caption">
+              <span class="hero__caption-label">Dokumentasi</span>
+              <span class="hero__caption-note">Kegiatan OSIS sepanjang periode</span>
+            </figcaption>
+          </figure>
+
+        </div>
+
+        <!-- Dekorasi blob aksen biru & merah (parallax via GSAP, float via CSS) -->
+        <div class="hero__decoration hero__decoration--one" aria-hidden="true" data-parallax="60"></div>
+        <div class="hero__decoration hero__decoration--two" aria-hidden="true" data-parallax="-40"></div>
+        <div class="hero__decoration hero__decoration--three" aria-hidden="true"></div>
+      </section>
+
+      <!-- ==========================================================
+           SOROTAN — slot dokumentasi besar + empat pilar kegiatan
+      =========================================================== -->
+      <section class="section section--showcase" id="sorotan" aria-labelledby="sorotan-title">
+        <div class="container">
+
+          <div class="section__head section__head--left showcase__head" data-reveal>
+            <span class="section-tag">Sorotan</span>
+            <h2 class="section-title" id="sorotan-title">Kegiatan yang kami jalankan</h2>
+            <p class="section__lead">
+              Empat pilar program kerja menjadi dasar setiap kegiatan — dari bimbingan belajar sampai bakti sosial di lingkungan sekolah.
+            </p>
+          </div>
+
+          <div class="showcase__grid">
+
+            <!-- Slot dokumentasi. Cara mengisi foto: ganti <span class="frame__media">
+                 dengan <img src="/foto/nama-file.jpg" alt="...">
+                 Simpan berkas di public/foto/ agar otomatis tersalin saat build. -->
+            <figure class="frame" data-reveal>
+              <span class="frame__media" aria-hidden="true"></span>
+              <figcaption class="frame__caption">
+                <span class="frame__label">Dokumentasi</span>
+                <span class="frame__note">Pentas seni akhir semester</span>
+              </figcaption>
+            </figure>
+
+            <ul class="showcase__list" data-reveal-stagger>
+
+              <li>
+                <a href="/proker/akademik/" class="showcase__item">
+                  <span class="showcase__icon" aria-hidden="true">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg>
+                  </span>
+                  <span class="showcase__body">
+                    <span class="showcase__title">Akademik &amp; Literasi</span>
+                    <span class="showcase__desc">Bimbingan belajar, klub literasi, dan persiapan lomba.</span>
+                  </span>
+                  <svg class="icon showcase__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                </a>
+              </li>
+
+              <li>
+                <a href="/proker/seni/" class="showcase__item">
+                  <span class="showcase__icon" aria-hidden="true">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8z"/><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/></svg>
+                  </span>
+                  <span class="showcase__body">
+                    <span class="showcase__title">Seni &amp; Kreativitas</span>
+                    <span class="showcase__desc">Pentas seni, lomba kreatif, dan wadah ekspresi karya.</span>
+                  </span>
+                  <svg class="icon showcase__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                </a>
+              </li>
+
+              <li>
+                <a href="/proker/olahraga/" class="showcase__item">
+                  <span class="showcase__icon" aria-hidden="true">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M17.596 12.768a2 2 0 1 0 2.829-2.829l-1.768-1.767a2 2 0 0 0 2.828-2.829l-2.828-2.828a2 2 0 0 0-2.829 2.828l-1.767-1.768a2 2 0 1 0-2.829 2.829z"/><path d="m2.5 21.5 1.4-1.4"/><path d="m20.1 3.9 1.4-1.4"/><path d="M5.343 21.485a2 2 0 1 0 2.829-2.828l1.767 1.768a2 2 0 1 0 2.829-2.829l-6.364-6.364a2 2 0 1 0-2.829 2.829l1.768 1.767a2 2 0 0 0-2.828 2.829z"/><path d="m9.6 14.4 4.8-4.8"/></svg>
+                  </span>
+                  <span class="showcase__body">
+                    <span class="showcase__title">Olahraga &amp; Prestasi</span>
+                    <span class="showcase__desc">Turnamen internal, pembinaan, dan ajang antar sekolah.</span>
+                  </span>
+                  <svg class="icon showcase__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                </a>
+              </li>
+
+              <li>
+                <a href="/proker/sosial/" class="showcase__item">
+                  <span class="showcase__icon" aria-hidden="true">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M19.414 14.414C21 12.828 22 11.5 22 9.5a5.5 5.5 0 0 0-9.591-3.676.6.6 0 0 1-.818.001A5.5 5.5 0 0 0 2 9.5c0 2.3 1.5 4 3 5.5l5.535 5.362a2 2 0 0 0 2.879.052 2.12 2.12 0 0 0-.004-3 2.124 2.124 0 1 0 3-3 2.124 2.124 0 0 0 3.004 0 2 2 0 0 0 0-2.828l-1.881-1.882a2.41 2.41 0 0 0-3.409 0l-1.71 1.71a2 2 0 0 1-2.828 0 2 2 0 0 1 0-2.828l2.823-2.762"/></svg>
+                  </span>
+                  <span class="showcase__body">
+                    <span class="showcase__title">Sosial &amp; Kepedulian</span>
+                    <span class="showcase__desc">Bakti sosial, penggalangan dana, dan aksi peduli lingkungan.</span>
+                  </span>
+                  <svg class="icon showcase__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                </a>
+              </li>
+
+            </ul>
+          </div>
+
+          <div class="showcase__actions" data-reveal>
+            <a href="/galeri/" class="btn btn--primary">Buka Galeri</a>
+            <a href="/proker/" class="btn btn--outline">Semua Program Kerja</a>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ==========================================================
+           PITA ANGKA — skala kepengurusan (angka beranimasi)
+      =========================================================== -->
+      <section class="stats-band" aria-labelledby="angka-title">
+        <div class="container">
+
+          <div class="stats-band__head" data-reveal>
+            <span class="section-tag section-tag--light">Dalam Angka</span>
+            <h2 class="section-title" id="angka-title">Cara kami bekerja sepanjang periode</h2>
+          </div>
+
+          <!-- Angka di sini sengaja berbeda dari statistik hero supaya tidak
+               ada informasi yang diulang di satu halaman. -->
+          <ul class="stats-band__list" data-reveal-stagger>
+            <li class="stat">
+              <span class="stat__number stat__number--text">2026 / 2027</span>
+              <span class="stat__label">Periode kepengurusan</span>
+            </li>
+            <li class="stat">
+              <span class="stat__number" data-count="8">8</span>
+              <span class="stat__label">Divisi kepengurusan</span>
+            </li>
+            <li class="stat">
+              <span class="stat__number" data-count="100" data-count-suffix="%">100%</span>
+              <span class="stat__label">Kegiatan dikelola siswa</span>
+            </li>
+          </ul>
+
+        </div>
+      </section>
+
+      <!-- ==========================================================
+           PETA HALAMAN — daftar topik bergaya indeks editorial
+      =========================================================== -->
+      <section class="section" aria-labelledby="jelajahi-title">
+        <div class="container index-layout">
+
+          <div class="index-head" data-reveal>
+            <span class="section-tag">Jelajahi</span>
+            <h2 class="section-title" id="jelajahi-title">Semua yang perlu kamu tahu</h2>
+            <p class="section__lead">
+              Setiap topik punya halamannya sendiri. Pilih salah satu untuk membaca penjelasan lengkapnya.
+            </p>
+          </div>
+
+          <ol class="index" data-reveal-stagger>
+
+            <li>
+              <a href="/profil/" class="index__item">
+                <span class="index__num">01</span>
+                <span class="index__body">
+                  <span class="index__title">Profil Organisasi</span>
+                  <span class="index__desc">Siapa kami, peran OSIS di SMK Texar Karawang, dan nilai yang kami pegang.</span>
+                </span>
+                <svg class="icon index__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </a>
+            </li>
+
+            <li>
+              <a href="/visi-misi/" class="index__item">
+                <span class="index__num">02</span>
+                <span class="index__body">
+                  <span class="index__title">Visi &amp; Misi</span>
+                  <span class="index__desc">Arah gerak dan komitmen yang menjadi acuan setiap program kerja kami.</span>
+                </span>
+                <svg class="icon index__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </a>
+            </li>
+
+            <li>
+              <a href="/proker/" class="index__item">
+                <span class="index__num">03</span>
+                <span class="index__body">
+                  <span class="index__title">Program Kerja</span>
+                  <span class="index__desc">Empat pilar kegiatan beserta program, jadwal, dan indikator keberhasilannya.</span>
+                </span>
+                <svg class="icon index__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </a>
+            </li>
+
+            <li>
+              <a href="/struktur/" class="index__item">
+                <span class="index__num">04</span>
+                <span class="index__body">
+                  <span class="index__title">Struktur Pengurus</span>
+                  <span class="index__desc">Susunan pengurus inti dan delapan divisi beserta tugas masing-masing.</span>
+                </span>
+                <svg class="icon index__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </a>
+            </li>
+
+            <li>
+              <a href="/galeri/" class="index__item">
+                <span class="index__num">05</span>
+                <span class="index__body">
+                  <span class="index__title">Galeri Kegiatan</span>
+                  <span class="index__desc">Dokumentasi momen dan kegiatan yang kami jalankan sepanjang periode.</span>
+                </span>
+                <svg class="icon index__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </a>
+            </li>
+
+            <li>
+              <a href="/berita/" class="index__item">
+                <span class="index__num">06</span>
+                <span class="index__body">
+                  <span class="index__title">Berita Terbaru</span>
+                  <span class="index__desc">Kabar kegiatan, pengumuman, dan catatan penting dari kepengurusan.</span>
+                </span>
+                <svg class="icon index__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </a>
+            </li>
+
+          </ol>
+        </div>
+      </section>
+
+      <!-- ==========================================================
+           CALL TO ACTION BAND
+      =========================================================== -->
+      <section class="cta-band">
+        <div class="cta-band__container" data-reveal>
+          <h2 class="cta-band__title">Punya aspirasi atau ingin berkolaborasi?</h2>
+          <p class="cta-band__text">Sampaikan ide, kritik, atau saranmu untuk kemajuan sekolah kita bersama.</p>
+          <div class="btn-row btn-row--center">
+            <a href="/kontak/" class="btn btn--secondary">Hubungi Kami</a>
+            <a href="/gabung/" class="btn btn--ghost">Gabung Kepengurusan</a>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- @include footer.html -->
+</body>
+</html>

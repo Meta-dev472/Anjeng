@@ -1,0 +1,82 @@
+<header class="header" id="header">
+    <div class="header__container">
+
+      <!-- Logo OSIS: public/logo.png (128×128, transparan) — otomatis tersalin
+           saat build. Berkas aslinya disimpan di src/assets/logo-sumber.png.
+           alt dikosongkan karena teks "OSIS SMK Texar" di sebelahnya sudah
+           menjadi nama tautan — pembaca layar tidak perlu mendengar dua kali. -->
+      <a href="/" class="header__logo" data-nav="beranda">
+        <img class="header__logo-icon" src="/logo.png" alt="" width="38" height="38" decoding="async">
+        <span class="header__logo-text">OSIS SMK Texar</span>
+      </a>
+
+      <!-- Checkbox hack untuk toggle menu mobile tanpa JavaScript -->
+      <input type="checkbox" id="nav-toggle" class="header__nav-toggle-input">
+      <label for="nav-toggle" class="header__nav-toggle" aria-label="Buka menu navigasi">
+        <span class="header__nav-toggle-bar"></span>
+        <span class="header__nav-toggle-bar"></span>
+        <span class="header__nav-toggle-bar"></span>
+      </label>
+
+      <!-- Layer pembungkus drawer: fixed seukuran viewport + overflow:hidden.
+           Panel drawer digeser DI DALAM layer ini, jadi tidak pernah
+           memperlebar dokumen → halaman mustahil di-geser ke kanan. -->
+      <div class="header__nav-layer">
+        <nav class="header__nav" aria-label="Navigasi utama" data-lenis-prevent>
+          <ul class="header__nav-list">
+
+            <li class="header__nav-item">
+              <a href="/profil/" class="header__nav-link" data-nav="profil" data-swup-preload>Profil</a>
+            </li>
+
+            <li class="header__nav-item">
+              <a href="/visi-misi/" class="header__nav-link" data-nav="visi-misi" data-swup-preload>Visi &amp; Misi</a>
+            </li>
+
+            <!-- Dropdown (desktop) / accordion (mobile) untuk 4 pilar proker -->
+            <li class="header__nav-item header__nav-item--menu">
+              <!-- data-nav-parent: menandai menu induk aktif juga saat berada
+                   di salah satu halaman pilar (mis. /proker/akademik/) -->
+              <button type="button" class="header__nav-link header__nav-link--toggle"
+                      id="nav-proker-toggle" aria-expanded="false" aria-controls="nav-proker-menu"
+                      data-nav-parent="proker">
+                <span>Proker</span>
+                <svg class="icon header__nav-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+              </button>
+              <ul class="header__subnav" id="nav-proker-menu">
+                <li><a href="/proker/" class="header__subnav-link" data-nav="proker">Semua Program Kerja</a></li>
+                <li><a href="/proker/akademik/" class="header__subnav-link" data-nav="proker-akademik">Akademik &amp; Literasi</a></li>
+                <li><a href="/proker/seni/" class="header__subnav-link" data-nav="proker-seni">Seni &amp; Kreativitas</a></li>
+                <li><a href="/proker/olahraga/" class="header__subnav-link" data-nav="proker-olahraga">Olahraga &amp; Prestasi</a></li>
+                <li><a href="/proker/sosial/" class="header__subnav-link" data-nav="proker-sosial">Sosial &amp; Kepedulian</a></li>
+              </ul>
+            </li>
+
+            <li class="header__nav-item">
+              <a href="/struktur/" class="header__nav-link" data-nav="struktur" data-swup-preload>Struktur</a>
+            </li>
+
+            <li class="header__nav-item">
+              <a href="/galeri/" class="header__nav-link" data-nav="galeri" data-swup-preload>Galeri</a>
+            </li>
+
+            <li class="header__nav-item">
+              <a href="/berita/" class="header__nav-link" data-nav="berita" data-swup-preload>Berita</a>
+            </li>
+
+            <li class="header__nav-item">
+              <a href="/kontak/" class="header__nav-link header__nav-link--cta" data-nav="kontak">Kontak</a>
+            </li>
+
+          </ul>
+        </nav>
+      </div>
+
+      <!-- Toggle mode terang/gelap — ikon SVG (matahari = light, bulan = dark) -->
+      <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Ganti mode terang/gelap">
+        <svg class="icon theme-toggle__icon theme-toggle__icon--sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+        <svg class="icon theme-toggle__icon theme-toggle__icon--moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"/></svg>
+      </button>
+
+    </div>
+  </header>
