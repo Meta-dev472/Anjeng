@@ -21,10 +21,14 @@ database) berisi 16 halaman + 404 yang terasa seperti SPA.
 | Build | **Vite 8** (`appType: 'mpa'`) |
 | Ikon | **SVG inline** dari `lucide-static`. **Emoji DILARANG.** |
 | Warna | Token semantik CSS, tema **terang (default)** & **gelap** |
+| Sistem desain | `design.md` (fondasi Pinterest): krem hangat + **SATU aksen merah** `#e60023`, radius 16/32/pill, kartu flat tanpa bayangan |
 | Deploy | Netlify (lihat `netlify.toml`); tidak butuh rewrite apa pun |
 
 Data statistik yang **tidak boleh diubah tanpa diminta**: `120+` Anggota aktif, `10+` Program
 kerja aktif, `18` Angkatan (angka `120+` masih contoh; lihat juga mini metrics di hero).
+
+**Teks/kalimat/slogan TIDAK boleh diubah** ketika menerapkan gaya dari `design.md` — yang
+mengikuti design.md hanya elemen visual: warna, font, radius, bayangan, komponen.
 
 ---
 
@@ -70,7 +74,7 @@ src/
     init.html                 <script> inline anti-flash & default tema
   assets/logo-sumber.png      berkas logo asli (TIDAK disajikan, hanya arsip)
 
-public/                       disalin apa adanya ke dist/ (favicon.svg, logo.png, foto/)
+public/                       disalin apa adanya ke dist/ (favicon.png, logo.png, logo-texar.webp, foto/)
 vite.config.js                plugin "osis:site-blueprint" (partial, URL, sitemap)
 netlify.toml                  build + header cache
 .env                          VITE_SITE_URL (domain asli untuk canonical/sitemap)
@@ -148,28 +152,37 @@ beri `aria-label` pada tombolnya.
 | Permukaan | `--bg`, `--bg-soft`, `--surface`, `--surface-glass`, `--surface-raised` |
 | Teks | `--heading`, `--text`, `--text-muted`, `--text-faint` |
 | Garis | `--border`, `--border-strong` |
-| Aksen | `--accent` (biru `#1E66F5`), `--accent-hover`, `--accent-ink` (untuk teks), `--accent-soft`, `--accent-ring`, `--accent-glow`, `--on-accent` |
-| Aksen merah | `--accent-red`, `--accent-red-ink`, `--accent-red-soft`, `--accent-red-ring` |
+| Aksen | `--accent` (merah `#e60023`, satu-satunya warna aksen), `--accent-hover` (pressed `#cc001f`), `--accent-ink`, `--accent-soft`, `--accent-ring`, `--accent-glow`, `--on-accent` |
+| Aksen merah | `--accent-red*` — nilainya KINI SAMA dengan `--accent` (merah tunggal); dipertahankan agar markup lama tak perlu diubah |
+| Fokus | `--focus-outer` (biru `#435ee5`, khusus ring fokus keyboard) + `--focus-inner` (celah putih) |
 | Chip ikon | `--chip-bg`, `--chip-border`, `--chip-icon`, `--chip-invert-*` |
 | Section "selalu gelap" | `--dark-bg`, `--dark-heading`, `--dark-text`, `--dark-border`, `--dark-glass`, `--dark-glow-*` |
 | Hero Beranda | `--hero-bg`, `--hero-heading`, `--hero-text(-faint)`, `--hero-border`, `--hero-glass`, `--hero-visual-*`, `--hero-shadow(-soft)` |
 
 Aturan turunannya:
-- Butuh **teks** berwarna aksen? pakai `--accent-ink` (versi tombol `--accent` terlalu pekat untuk teks kecil).
-- Section yang memang gelap di kedua tema (hero lama, pita angka, CTA band, footer, page-hero)
-  memakai `--dark-*`, **bukan** `--bg/--text`.
+- Butuh **teks** berwarna aksen? pakai `--accent-ink`.
+- Merah aksen **langka** (design.md: satu CTA merah per lipatan). Aksi sekunder/kartu netral
+  memakai ink/krem (`--chip-invert-*`, `--surface-raised`), bukan merah.
+- Section yang memang gelap di kedua tema (pita angka, CTA band, vision, footer) kini
+  memakai **charcoal hangat `#262622`** (surface-dark design.md), bukan hitam kebiruan.
+- **Tanpa bayangan** di kartu (design.md flat); satu-satunya bayangan adalah `--shadow-lg`
+  untuk dropdown/lightbox/modal, plus scrim `--scrim`.
+- Ring fokus keyboard = dua lapis `--focus-outer` + `--focus-inner` (lihat §2).
 - Komponen baru harus ditambahkan ke blok `html.theme-anim .…` (§23 style.css) agar transisi
   450ms saat ganti tema ikut berlaku.
 
 ### 5.3 Tipografi
-- **Beranda:** judul memakai `--font-display` = **Plus Jakarta Sans** (di-set 800, `letter-spacing` negatif).
-  Semua aturan khusus Beranda dibungkus `.home` supaya halaman lain tidak terpengaruh.
-- **Halaman lain & komponen bersama:** `--font-heading` = **Poppins**, teks isi **Inter**.
+- **Inter** = font teks & antarmuka (substitusi utama Pin Sans dari design.md): body, tombol,
+  navbar, footer, halaman isi — dimuat oleh **semua** halaman.
+- **Plus Jakarta Sans** = tier display, dipakai `--font-display` di dalam `.home`:
+  judul hero (600, kata kunci aksen 700), judul section & angka (700).
+  Hanya `index.html` yang memuat font ini — jangan memakainya di halaman lain.
+- Bobot 800 sudah dihapus — jangan menambahnya lagi; display maksimal 700 dengan
+  `letter-spacing` negatif (ala display design.md).
 - Font dimuat per halaman lewat `<link>` Google Fonts di `<head>` (bukan satu partial bersama),
-  jadi **menambah font berarti mengedit font link di setiap file HTML**.
-- ⚠️ **Jangan** mengubah `--font-heading` menjadi Plus Jakarta Sans. Beranda memuat font itu,
-  dan Swup menyimpan aset (`persistAssets`) — akibatnya heading halaman lain akan berubah font
-  setelah pengunjung pernah membuka Beranda.
+  jadi **mengubah set font berarti mengedit font link di setiap file HTML** (17 file).
+- ⚠️ Ingat Swup menyimpan aset (`persistAssets`) — font yang dimuat satu halaman akan membekas
+  ke halaman berikutnya dalam satu sesi. Itu sebabnya tier display dibatasi di Beranda.
 
 ### 5.4 Animasi: pasang lewat atribut `data-*`
 | Atribut | Efek |
@@ -229,9 +242,28 @@ Filter memanggil `refreshPageAnimations()` agar ScrollTrigger tetap akurat.
 
 ### 5.8 Slot foto (placeholder → foto asli)
 Proyek ini **belum punya foto asli**. Pola yang dipakai: elemen `<span class="…-media">` sebagai
-slot bergaris/diagonal. Mengganti dengan foto asli = cukup menukar span itu dengan
+slot **permukaan polos + satu lingkaran samar** — arsir diagonal/hatching khas template AI
+sengaja DIHAPUS. Mengganti dengan foto asli = cukup menukar span itu dengan
 `<img src="/foto/nama.jpg" alt="…">` (taruh berkas di `public/foto/`). Overlay, caption, dan
 lightbox tetap bekerja. Jangan hapus pembungkus `figure`-nya.
+
+Konvensi anti-"AI-look" yang dipertahankan: latar section bersih tanpa tekstur grid,
+ikon kartu Sorotan ber-tint pastel per pilar (`showcase__icon--buku/seni/olahraga/sosial`),
+statistik hero berupa stat row terintegrasi (bukan kartu melayang), dan ikon tombol utama
+berupa kompas beranimasi (bukan panah generik).
+
+### 5.9 Ornamen geometris kecil (Pinterest-style)
+Dua komponen dekoratif di bagian 1c `style.css`: `.quarter-arc` (busur 1/4 lingkaran,
+cutout interior via `::before` yang **wajib** diganti ulang di tiap varian warna) dan
+`.dot-grid` (grid titik `radial-gradient`, warna via `currentColor`). Terpasang di 3 tempat:
+hero (arc + dots), showcase (dots), cta-band (arc + dots merah samar). Semua `aria-hidden`,
+`pointer-events: none`, memakai token tema, **hilang di ponsel ≤767px** (kecuali arc),
+dan ikut transisi tema 450ms.
+
+**Aturan disiplin (agar situs tetap tenang):** maksimal SATU ornamen per sudut section,
+hanya 2–3 section situs-wide, ukuran kecil (arc 84–116px, dots 64–84px), inset negatif
+ringan saja. Jangan menambah bentuk baru di luar dua pola ini tanpa diminta — ini gestur
+kesengajaan, bukan sistem.
 
 ---
 
@@ -242,10 +274,10 @@ baru di akhir (dengan nomor lanjut)** — jangan menyelipkan aturan acak di teng
 
 | Bagian | Isi |
 |---|---|
-| 1 / 1b | Token terang (default) & gelap |
+| 1 / 1b | Token terang (default) & gelap — palet design.md (krem hangat + merah tunggal) |
 | 2–4 | Reset, `.icon`, utility (`.section-tag`, `.section-title`, tombol) |
 | 5 | Header/navbar |
-| 6 | Hero Beranda (permukaan terang, kartu statistik, photo grid) |
+| 6 | Hero Beranda (permukaan krem bersih TANPA tekstur grid, stat row tanpa kartu dengan divider vertikal, photo grid) |
 | 7–11 | Section lama: profil, visi-misi, proker, CTA band, footer |
 | 12–13 | Transisi tema & media query lama (mobile-first: 480 → 768 → 1024 → 1280) |
 | 15–21 | Halaman dalam: page-hero, kartu, teks panjang, slot foto/galeri/lightbox, dropdown, footer sitemap, 404 |
@@ -304,8 +336,8 @@ Checklist setelah menambah halaman:
 3. Tambahkan tautan ke halaman itu di `src/partials/header.html` dan/atau `footer.html` (dan beri `data-nav`).
 4. `npm run build`, lalu pastikan `sitemap.xml` bertambah dan tidak ada tautan rusak.
 
-Halaman Beranda adalah pengecualian: satu-satunya yang memakai pembungkus `.home`, `--font-display`
-Plus Jakarta Sans, dan font link memuat `Plus+Jakarta+Sans`.
+Halaman Beranda adalah pengecualian: satu-satunya yang memakai pembungkus `.home`,
+`--font-display` (Plus Jakarta Sans), dan font link tambahan Plus Jakarta Sans.
 
 ---
 
@@ -335,6 +367,26 @@ Plus Jakarta Sans, dan font link memuat `Plus+Jakarta+Sans`.
 
 (Favicon sudah diganti dari monogram "OT" menjadi `public/favicon.png` yang dibuat dari
 `public/logo.png`; jika logo berganti, regenerasi favicon dari logo baru itu.)
+
+**Logos berpasangan SETINGGI-SAMA di header** (partial `header.html`, satu tempat untuk
+semua halaman): logo BAFU (`/logo-texar.webp`) + logo OSIS (`/logo.png`) memakai kelas sama
+(`.header__logo-icon`, `width: auto`) — lebar mengikuti rasio asli masing-masing, jadi yang
+disamakan adalah TINGGI render, bukan kotaknya. **Tanpa pembatas** di antara mereka —
+pemisah cukup dari `gap` flexbox — lalu teks dua baris "OSIS SMK TEXAR" (uppercase via CSS)
+dengan sub-heading "Official Website" (`.header__logo-sub`, micro-tag tracking lebar).
+Skala brand sengaja kompak + geser optis ke kiri (`margin-left` negatif di
+`.header__logo`): mobile <1024px = ikon 34px, font 0.88rem, sub 0.5rem, margin −0.25rem;
+desktop ≥1024px (mq yang sama dengan pergantian nav drawer→desktop) = ikon 38px,
+font 0.97rem, sub 0.55rem, margin −0.4rem. Kompensasi margin internal gambar logo —
+ubalah hanya jika gambar logonya ikut berubah.
+
+⚠️ `logo-texar.webp` telah DI-TRIM dari 600×600 (bermargin kosong 67–87px per sisi, emblem
+hanya 71% tinggi kanvas) menjadi **467×427** yang mengisi kanvas 100% — penyebabnya logo
+BAFU tampak lebih kecil dari OSIS padahal kotak CSS-nya sama. Salinan sumber ter-trim ada
+di `src/assets/logo-texar-sumber.webp`. **Jika logo diganti, trim dulu margin transparannya**
+(Pillow: alpha `getbbox()` → `crop`) sebelum dipakai, dan jangan tambahkan elemen
+pembatas/garis antar-logo atau buat tinggi render keduanya berbeda (permintaan eksplisit
+pemilik).
 
 ---
 

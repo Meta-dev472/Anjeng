@@ -1,13 +1,18 @@
 <header class="header" id="header">
     <div class="header__container">
 
-      <!-- Logo OSIS: public/logo.png (128×128, transparan) — otomatis tersalin
-           saat build. Berkas aslinya disimpan di src/assets/logo-sumber.png.
-           alt dikosongkan karena teks "OSIS SMK Texar" di sebelahnya sudah
-           menjadi nama tautan — pembaca layar tidak perlu mendengar dua kali. -->
+      <!-- Logos berpasangan seukuran: BAFU (logo-texar.webp) di KIRI, lalu
+           logo OSIS (logo.png), lalu nama + sub-heading. Semua di public/ —
+           otomatis tersalin saat build. alt dikosongkan karena teks
+           "OSIS SMK TEXAR" di sebelahnya sudah menjadi nama tautan —
+           pembaca layar tidak perlu mendengar dua kali. -->
       <a href="/" class="header__logo" data-nav="beranda">
-        <img class="header__logo-icon" src="/logo.png" alt="" width="38" height="38" decoding="async">
-        <span class="header__logo-text">OSIS SMK Texar</span>
+        <img class="header__logo-icon" src="/logo-texar.webp" alt="" width="467" height="427" decoding="async">
+        <img class="header__logo-icon" src="/logo.png" alt="" width="128" height="128" decoding="async">
+        <span class="header__logo-text">
+          <span class="header__logo-title">OSIS SMK TEXAR</span>
+          <span class="header__logo-sub">Official Website</span>
+        </span>
       </a>
 
       <!-- Checkbox hack untuk toggle menu mobile tanpa JavaScript -->

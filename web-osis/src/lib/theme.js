@@ -22,7 +22,7 @@ export function applyTheme(next) {
 
   // Warna antarmuka browser (address bar) ikut menyesuaikan tema
   const meta = document.querySelector('meta[name="theme-color"]');
-  if (meta) meta.setAttribute('content', next === 'dark' ? '#0a0a0a' : '#ffffff');
+  if (meta) meta.setAttribute('content', next === 'dark' ? '#262622' : '#ffffff');
 
   // Transisi warna halus 450ms; class dibersihkan setelah selesai
   root.classList.add('theme-anim');

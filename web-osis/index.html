@@ -23,12 +23,14 @@
   <link rel="icon" type="image/png" href="/favicon.png">
 
   <!-- Google Fonts
-       - Plus Jakarta Sans: judul Beranda (sans-serif modern, menggantikan
-         Instrument Serif) sekaligus heading halaman lain
-       - Inter: teks isi & label -->
+       - Inter: teks isi, tombol & antarmuka (substitusi utama Pin Sans,
+         lihat design.md "Note on Font Substitutes")
+       - Plus Jakarta Sans: TIER DISPLAY — judul hero & angka besar Beranda.
+         Sans-serif geometris modern yang tegas & profesional (rekomendasi
+         untuk situs organisasi/sekolah; judul 600, kata kunci 700) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700&display=swap" rel="stylesheet">
 
   <!-- Tema awal (anti-flash) + penanda JS aktif + pengalihan tautan # lama -->
   <!-- @include init.html -->
@@ -44,16 +46,20 @@
   <!-- Kontainer yang ditukar Swup saat berpindah halaman -->
   <main id="swup">
 
-    <!-- Semua gaya khusus Beranda dibatasi di dalam .home, supaya tipografi
-         halaman lain tetap memakai Poppins/Inter seperti sebelumnya. -->
+    <!-- Semua gaya khusus Beranda dibatasi di dalam .home. -->
     <div class="home">
 
       <!-- ==========================================================
-           HERO — permukaan terang: judul di kiri (kata kunci diberi warna
-           aksen) dan slot foto sinematik di kanan. Judul memakai Plus
-           Jakarta Sans — lihat bagian 26 di src/style.css.
+           HERO — permukaan krem hangat: judul di kiri (kata kunci merah)
+           dan slot foto sinematik di kanan. Judul memakai Plus Jakarta Sans
+           600, kata kunci ditebalkan ke 700 (hierarki dua tingkat).
       =========================================================== -->
       <section class="hero" id="beranda">
+        <!-- Ornamen geometris kecil ala Pinterest: busur 1/4 lingkaran + grid
+             titik. Murni dekoratif (aria-hidden), memakai token tema, dan
+             hilang di ponsel (lihat bagian 1c di src/style.css). -->
+        <span class="quarter-arc quarter-arc--hero" aria-hidden="true"></span>
+        <span class="dot-grid dot-grid--hero" aria-hidden="true"></span>
         <div class="hero__container">
 
           <div class="hero__copy">
@@ -122,12 +128,13 @@
               </div>
             </div>
 
-            <!-- Dua aksi utama: biru (jelajah program) & garis merah
+            <!-- Dua aksi utama: merah solid (jelajah program) & outline merah
                  (daftar aspirasi), plus satu tautan tersier ke Profil. -->
             <div class="hero__actions" data-intro>
               <a href="/proker/" class="btn btn--primary">
                 Jelajahi Program
-                <svg class="icon btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                <!-- Ikon spesifik (bukan panah generik): kompas = petra program -->
+                <svg class="icon btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
               </a>
               <a href="/kontak/" class="btn btn--outline-red">
                 Daftar Aspirasi
@@ -179,7 +186,7 @@
 
         </div>
 
-        <!-- Dekorasi blob aksen biru & merah (parallax via GSAP, float via CSS) -->
+        <!-- Dekorasi blob netral hangat (parallax via GSAP, float via CSS) -->
         <div class="hero__decoration hero__decoration--one" aria-hidden="true" data-parallax="60"></div>
         <div class="hero__decoration hero__decoration--two" aria-hidden="true" data-parallax="-40"></div>
         <div class="hero__decoration hero__decoration--three" aria-hidden="true"></div>
@@ -189,6 +196,7 @@
            SOROTAN — slot dokumentasi besar + empat pilar kegiatan
       =========================================================== -->
       <section class="section section--showcase" id="sorotan" aria-labelledby="sorotan-title">
+        <span class="dot-grid dot-grid--showcase" aria-hidden="true"></span>
         <div class="container">
 
           <div class="section__head section__head--left showcase__head" data-reveal>
@@ -216,7 +224,9 @@
 
               <li>
                 <a href="/proker/akademik/" class="showcase__item">
-                  <span class="showcase__icon" aria-hidden="true">
+                  <!-- Tint pastel per pilar (buku=amber): ikut meramaikan
+                       tanpa meninggalkan sistem warna yang tenang -->
+                  <span class="showcase__icon showcase__icon--buku" aria-hidden="true">
                     <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg>
                   </span>
                   <span class="showcase__body">
@@ -229,7 +239,7 @@
 
               <li>
                 <a href="/proker/seni/" class="showcase__item">
-                  <span class="showcase__icon" aria-hidden="true">
+                  <span class="showcase__icon showcase__icon--seni" aria-hidden="true">
                     <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8z"/><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/></svg>
                   </span>
                   <span class="showcase__body">
@@ -242,7 +252,7 @@
 
               <li>
                 <a href="/proker/olahraga/" class="showcase__item">
-                  <span class="showcase__icon" aria-hidden="true">
+                  <span class="showcase__icon showcase__icon--olahraga" aria-hidden="true">
                     <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M17.596 12.768a2 2 0 1 0 2.829-2.829l-1.768-1.767a2 2 0 0 0 2.828-2.829l-2.828-2.828a2 2 0 0 0-2.829 2.828l-1.767-1.768a2 2 0 1 0-2.829 2.829z"/><path d="m2.5 21.5 1.4-1.4"/><path d="m20.1 3.9 1.4-1.4"/><path d="M5.343 21.485a2 2 0 1 0 2.829-2.828l1.767 1.768a2 2 0 1 0 2.829-2.829l-6.364-6.364a2 2 0 1 0-2.829 2.829l1.768 1.767a2 2 0 0 0-2.828 2.829z"/><path d="m9.6 14.4 4.8-4.8"/></svg>
                   </span>
                   <span class="showcase__body">
@@ -255,7 +265,7 @@
 
               <li>
                 <a href="/proker/sosial/" class="showcase__item">
-                  <span class="showcase__icon" aria-hidden="true">
+                  <span class="showcase__icon showcase__icon--sosial" aria-hidden="true">
                     <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M19.414 14.414C21 12.828 22 11.5 22 9.5a5.5 5.5 0 0 0-9.591-3.676.6.6 0 0 1-.818.001A5.5 5.5 0 0 0 2 9.5c0 2.3 1.5 4 3 5.5l5.535 5.362a2 2 0 0 0 2.879.052 2.12 2.12 0 0 0-.004-3 2.124 2.124 0 1 0 3-3 2.124 2.124 0 0 0 3.004 0 2 2 0 0 0 0-2.828l-1.881-1.882a2.41 2.41 0 0 0-3.409 0l-1.71 1.71a2 2 0 0 1-2.828 0 2 2 0 0 1 0-2.828l2.823-2.762"/></svg>
                   </span>
                   <span class="showcase__body">
@@ -398,6 +408,8 @@
            CALL TO ACTION BAND
       =========================================================== -->
       <section class="cta-band">
+        <span class="quarter-arc quarter-arc--cta" aria-hidden="true"></span>
+        <span class="dot-grid dot-grid--cta" aria-hidden="true"></span>
         <div class="cta-band__container" data-reveal>
           <h2 class="cta-band__title">Punya aspirasi atau ingin berkolaborasi?</h2>
           <p class="cta-band__text">Sampaikan ide, kritik, atau saranmu untuk kemajuan sekolah kita bersama.</p>
