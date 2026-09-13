@@ -1,0 +1,26 @@
+{
+  "event": {
+    "enabled": true,
+    "tag": "Event selanjutnya",
+    "title": "Maulid Nabi",
+    "image": "/maulid.png",
+    "link": "/berita/"
+  },
+  "hero": {
+    "eyebrow": "Organisasi Siswa Intra Sekolah · Periode 2026/2027",
+    "headlinePre": "Wadah bagi setiap siswa untuk ",
+    "accent1": "bergerak",
+    "accent2": "berkarya",
+    "accent3": "berdampak",
+    "headlineAfter": "",
+    "subtext": "OSIS SMK Texar Karawang menghimpun aspirasi, kreativitas, dan kepemimpinan siswa lewat program kerja nyata di empat pilar: akademik, seni, olahraga, dan sosial."
+  },
+  "stats": {
+    "anggota": "120+",
+    "proker": "10+",
+    "angkatan": "18",
+    "aspirasi": "500+",
+    "sekbid": "8"
+  },
+  "periode": "2026/2027"
+}

@@ -144,25 +144,37 @@
           </div>
 
           <div class="card" data-reveal>
-            <h3 class="card__title">Kirim Lewat Email</h3>
+            <h3 class="card__title">Kirim Aspirasi</h3>
             <p class="card__text">
-              Tombol di bawah akan membuka aplikasi emailmu dengan subjek yang sudah terisi, sehingga pesanmu lebih mudah ditemukan oleh pengurus.
+              Isi formulir ini — aspirasimu langsung masuk ke daftar yang dibaca kepengurusan.
             </p>
-            <ul class="checklist">
-              <li class="checklist__item">
-                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-                Balasan diberikan pada jam layanan sekolah.
-              </li>
-              <li class="checklist__item">
-                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-                Aspirasi anonim tetap dibahas dalam rapat.
-              </li>
-              <li class="checklist__item">
-                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-                Hasil pembahasan disampaikan lewat papan informasi OSIS.
-              </li>
-            </ul>
-            <a href="mailto:osis@smktexarkarawang.sch.id?subject=Aspirasi%20Siswa%20%E2%80%94%20OSIS%20SMK%20Texar" class="btn btn--primary">Kirim Aspirasi</a>
+
+            <form class="aspirasi-form" id="aspirasi-form" novalidate>
+              <!-- Honeypot: bot mengisi ini, manusia tidak melihatnya -->
+              <div class="aspirasi-form__hp" aria-hidden="true">
+                <label>Jangan isi kolom ini <input type="text" name="company" tabindex="-1" autocomplete="off"></label>
+              </div>
+
+              <div class="field">
+                <label class="field__label" for="aspirasi-nama">Nama <span class="field__optional">opsional</span></label>
+                <input class="field__input" type="text" id="aspirasi-nama" name="name" maxlength="80" autocomplete="name" placeholder="Boleh dikosongkan untuk anonim">
+              </div>
+
+              <div class="field">
+                <label class="field__label" for="aspirasi-pesan">Aspirasi</label>
+                <textarea class="field__input field__input--area" id="aspirasi-pesan" name="message" rows="5" minlength="10" maxlength="1000" required placeholder="Tuliskan usulan, kritik, atau saranmu di sini…"></textarea>
+                <p class="field__hint">Minimal 10 karakter. Bila ingin anonim, sebutkan juga di awal pesan.</p>
+              </div>
+
+              <p class="aspirasi-form__status" id="aspirasi-status" role="status" aria-live="polite"></p>
+
+              <button type="submit" class="btn btn--primary aspirasi-form__submit">Kirim Aspirasi</button>
+            </form>
+
+            <p class="aspirasi-form__alt">
+              Lebih nyaman lewat email? Kirim ke
+              <a href="mailto:osis@smktexarkarawang.sch.id?subject=Aspirasi%20Siswa%20%E2%80%94%20OSIS%20SMK%20Texar">osis@smktexarkarawang.sch.id</a>.
+            </p>
           </div>
 
         </div>

@@ -37,6 +37,8 @@ import {
 } from './lib/animations.js';
 import { initNav, closeNav, syncActiveNav } from './lib/nav.js';
 import { initGallery, destroyGallery, initLightboxKeys } from './lib/gallery.js';
+import { initStats, destroyStats } from './lib/stats.js';
+import { initAspirasiForm, destroyAspirasiForm } from './lib/aspirasi.js';
 
 // --------------------------------------------------------------------------
 // 1. TEMA — dipasang paling awal, tidak menunggu boot.
@@ -77,6 +79,12 @@ function playCurrentPage() {
     initGallery();
     initLightboxKeys();
   });
+
+  // Carousel statistik + count-up ber-IO (anime.js) — Beranda
+  safeInit('stats', initStats);
+
+  // Form aspirasi publik — /kontak/
+  safeInit('aspirasi-form', initAspirasiForm);
 
   safeInit('active-nav', syncActiveNav);
 
@@ -120,6 +128,8 @@ function initRouter() {
     // Bersihkan state yang terikat pada halaman lama
     closeNav();
     destroyGallery();
+    destroyStats();
+    destroyAspirasiForm();
     killPageAnimations();
 
     // Naik ke atas dengan animasi (pilihan "ke atas dengan animasi")

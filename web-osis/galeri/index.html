@@ -85,6 +85,10 @@
           <p class="gallery__count"><strong data-gallery-count>12</strong> foto ditampilkan</p>
         </div>
 
+        <!-- Galeri foto — sumber kebenaran: content/galeri.json (tambah/
+             hapus lewat panel admin). Render: scripts/content.js
+             renderGaleriGrid(). -->
+        <!-- @content:start galeri-grid -->
         <div class="gallery__grid" data-reveal-stagger>
 
           <button type="button" class="photo" data-photo data-category="akademik" data-caption="Sesi bimbingan belajar bersama seusai KBM">
@@ -148,59 +152,9 @@
           </button>
 
         </div>
+        <!-- @content:end -->
 
         <p class="gallery__empty" hidden data-gallery-empty>Belum ada foto pada kategori ini.</p>
-      </div>
-    </section>
-
-    <!-- ===========================================================
-         CARA MENGISI FOTO (catatan untuk pengelola situs)
-    ============================================================ -->
-    <section class="section section--soft" aria-labelledby="catatan-title">
-      <div class="container">
-        <div class="section__head section__head--left" data-reveal>
-          <span class="section-tag">Catatan Pengelola</span>
-          <h2 class="section-title" id="catatan-title">Cara Mengisi Slot Foto</h2>
-          <p class="section__lead">
-            Semua kotak bergaris di atas adalah slot. Ganti satu baris di dalamnya dan foto asli akan tampil — termasuk di pratinjau.
-          </p>
-        </div>
-
-        <div class="grid grid--2">
-          <div class="prose" data-reveal>
-            <p>Contoh bagian dalam satu tombol galeri:</p>
-            <blockquote>
-              &lt;button type="button" class="photo" data-photo data-category="akademik" data-caption="…"&gt;<br>
-              &nbsp;&nbsp;&lt;img src="/foto/akademik-1.jpg" alt="Sesi bimbingan belajar bersama"&gt;<br>
-              &lt;/button&gt;
-            </blockquote>
-            <p>
-              Simpan berkas foto di folder <strong>public/foto/</strong>. Ukuran yang disarankan sekitar 1600 piksel pada sisi terpanjang agar tetap ringan saat dibuka di ponsel.
-            </p>
-          </div>
-
-          <div class="card" data-reveal>
-            <h3 class="card__title">Tips agar Galeri Tetap Cepat</h3>
-            <ul class="checklist">
-              <li class="checklist__item">
-                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-                Gunakan format JPG kualitas 80% atau WebP.
-              </li>
-              <li class="checklist__item">
-                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-                Tulis <strong>alt</strong> yang menjelaskan isi foto, bukan nama berkas.
-              </li>
-              <li class="checklist__item">
-                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-                Cukup 3–4 foto terbaik per kategori agar halaman tetap ringan.
-              </li>
-              <li class="checklist__item">
-                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-                Isi <strong>data-caption</strong> karena teks itu yang muncul di pratinjau.
-              </li>
-            </ul>
-          </div>
-        </div>
       </div>
     </section>
 

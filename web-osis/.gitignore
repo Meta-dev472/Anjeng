@@ -3,3 +3,8 @@ dist
 .DS_Store
 *.local
 .env
+
+# Halaman detail berita digenerate dari content/berita.json — jangan diedit
+# manual, akan ditimpa saat build (sumber: panel admin).
+berita/*/
+.content-tmp

@@ -61,6 +61,10 @@
          PERAN & TANGGUNG JAWAB
     =========================================================== -->
     <section class="profile">
+      <!-- Ornamen khas profil: cincin konsentris ala stempel dokumen di
+           sudut kanan-atas (tipe berbeda dari arc/dots §5.9). Murni
+           dekoratif, tersembunyi di ponsel. -->
+      <span class="profile__ornament" aria-hidden="true"></span>
       <div class="profile__container">
 
         <div class="profile__media" aria-hidden="true" data-reveal>
@@ -81,24 +85,48 @@
           <p class="profile__text">
             Tiga hal yang kami jaga dalam setiap kegiatan: <strong>aspirasi siswa didengar</strong>, <strong>pelaksanaan berjalan rapi</strong>, dan <strong>hasilnya bisa dievaluasi bersama</strong>.
           </p>
-
-          <ul class="profile__stats">
-            <li class="profile__stat">
-              <span class="profile__stat-number">10+</span>
-              <span class="profile__stat-label">Program Kerja Aktif</span>
-            </li>
-            <li class="profile__stat">
-              <span class="profile__stat-number">8</span>
-              <span class="profile__stat-label">Divisi Kepengurusan</span>
-            </li>
-            <li class="profile__stat">
-              <span class="profile__stat-number">4</span>
-              <span class="profile__stat-label">Pilar Kegiatan</span>
-            </li>
-          </ul>
         </div>
 
       </div>
+
+      <!-- ==========================================================
+           MARQUEE STATISTIK — dua baris berlawanan arah (atas → kanan,
+           bawah → kiri), kecepatan berbeda agar terasa organik. Tiap set
+           diduplikasi sekali di markup agar loop translateX(-50%) mulus.
+           Angka = fakta yang sama dengan beranda & stats-band (jangan
+           mengarang angka baru). Hover: jeda. reduced-motion: statis.
+      =========================================================== -->
+      <!-- Marquee statistik — sumber kebenaran: content/site.json →
+           site.stats + site.periode (edit lewat panel admin). Render:
+           scripts/content.js renderMarquee(). -->
+      <!-- @content:start marquee-profile -->
+      <div class="marquee marquee--profile" aria-label="Organisasi dalam angka" data-reveal>
+        <div class="marquee__row marquee__row--right">
+          <ul class="marquee__track">
+            <li class="marquee__item"><span class="marquee__icon" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><path d="M16 3.128a4 4 0 0 1 0 7.744"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><circle cx="9" cy="7" r="4"/></svg></span><div class="marquee__text"><span class="marquee__number">120+</span><span class="marquee__label">Anggota aktif</span></div></li>
+            <li class="marquee__item"><span class="marquee__icon" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v3"/><path d="M16 2v3"/><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="m9 15 2 2 4-4"/></svg></span><div class="marquee__text"><span class="marquee__number">10+</span><span class="marquee__label">Program kerja aktif</span></div></li>
+            <li class="marquee__item"><span class="marquee__icon" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg></span><div class="marquee__text"><span class="marquee__number">18</span><span class="marquee__label">Angkatan</span></div></li>
+            <li class="marquee__item"><span class="marquee__icon" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span><div class="marquee__text"><span class="marquee__number">500+</span><span class="marquee__label">Aspirasi terpenuhi</span></div></li>
+            <li class="marquee__item" aria-hidden="true"><span class="marquee__icon" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><path d="M16 3.128a4 4 0 0 1 0 7.744"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><circle cx="9" cy="7" r="4"/></svg></span><div class="marquee__text"><span class="marquee__number">120+</span><span class="marquee__label">Anggota aktif</span></div></li>
+            <li class="marquee__item" aria-hidden="true"><span class="marquee__icon" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v3"/><path d="M16 2v3"/><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="m9 15 2 2 4-4"/></svg></span><div class="marquee__text"><span class="marquee__number">10+</span><span class="marquee__label">Program kerja aktif</span></div></li>
+            <li class="marquee__item" aria-hidden="true"><span class="marquee__icon" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg></span><div class="marquee__text"><span class="marquee__number">18</span><span class="marquee__label">Angkatan</span></div></li>
+            <li class="marquee__item" aria-hidden="true"><span class="marquee__icon" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span><div class="marquee__text"><span class="marquee__number">500+</span><span class="marquee__label">Aspirasi terpenuhi</span></div></li>
+          </ul>
+        </div>
+        <div class="marquee__row marquee__row--left">
+          <ul class="marquee__track">
+            <li class="marquee__item"><span class="marquee__icon" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="16" y="16" width="6" height="6" rx="1"/><rect x="2" y="16" width="6" height="6" rx="1"/><rect x="9" y="2" width="6" height="6" rx="1"/><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3"/><path d="M12 12V8"/></svg></span><div class="marquee__text"><span class="marquee__number">8</span><span class="marquee__label">Divisi kepengurusan</span></div></li>
+            <li class="marquee__item"><span class="marquee__icon" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/></svg></span><div class="marquee__text"><span class="marquee__number">4</span><span class="marquee__label">Pilar kegiatan</span></div></li>
+            <li class="marquee__item"><span class="marquee__icon" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><path d="m16 9-5.5 5.5L8 12"/></svg></span><div class="marquee__text"><span class="marquee__number">100%</span><span class="marquee__label">Kegiatan dikelola siswa</span></div></li>
+            <li class="marquee__item"><span class="marquee__icon" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M16 2v3"/><path d="M3 9h18"/><path d="M8 2v3"/><path d="M17 13h-6"/><path d="M13 17H7"/><path d="M7 13h.01"/><path d="M17 17h.01"/></svg></span><div class="marquee__text"><span class="marquee__number">2026/2027</span><span class="marquee__label">Periode kepengurusan</span></div></li>
+            <li class="marquee__item" aria-hidden="true"><span class="marquee__icon" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="16" y="16" width="6" height="6" rx="1"/><rect x="2" y="16" width="6" height="6" rx="1"/><rect x="9" y="2" width="6" height="6" rx="1"/><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3"/><path d="M12 12V8"/></svg></span><div class="marquee__text"><span class="marquee__number">8</span><span class="marquee__label">Divisi kepengurusan</span></div></li>
+            <li class="marquee__item" aria-hidden="true"><span class="marquee__icon" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/></svg></span><div class="marquee__text"><span class="marquee__number">4</span><span class="marquee__label">Pilar kegiatan</span></div></li>
+            <li class="marquee__item" aria-hidden="true"><span class="marquee__icon" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><path d="m16 9-5.5 5.5L8 12"/></svg></span><div class="marquee__text"><span class="marquee__number">100%</span><span class="marquee__label">Kegiatan dikelola siswa</span></div></li>
+            <li class="marquee__item" aria-hidden="true"><span class="marquee__icon" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M16 2v3"/><path d="M3 9h18"/><path d="M8 2v3"/><path d="M17 13h-6"/><path d="M13 17H7"/><path d="M7 13h.01"/><path d="M17 17h.01"/></svg></span><div class="marquee__text"><span class="marquee__number">2026/2027</span><span class="marquee__label">Periode kepengurusan</span></div></li>
+          </ul>
+        </div>
+      </div>
+      <!-- @content:end -->
     </section>
 
     <!-- ==========================================================

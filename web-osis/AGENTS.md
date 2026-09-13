@@ -22,10 +22,22 @@ database) berisi 16 halaman + 404 yang terasa seperti SPA.
 | Ikon | **SVG inline** dari `lucide-static`. **Emoji DILARANG.** |
 | Warna | Token semantik CSS, tema **terang (default)** & **gelap** |
 | Sistem desain | `design.md` (fondasi Pinterest): krem hangat + **SATU aksen merah** `#e60023`, radius 16/32/pill, kartu flat tanpa bayangan |
-| Deploy | Netlify (lihat `netlify.toml`); tidak butuh rewrite apa pun |
+| Deploy | Vercel (lihat `vercel.json`); MPA statis + serverless `/api/admin` |
 
 Data statistik yang **tidak boleh diubah tanpa diminta**: `120+` Anggota aktif, `10+` Program
-kerja aktif, `18` Angkatan (angka `120+` masih contoh; lihat juga mini metrics di hero).
+kerja aktif, `18` Angkatan, `500+` Aspirasi terpenuhi, `8` Sekbid aktif (semuanya masih
+contoh). "12+ Program kerja" sengaja DIHAPUS sebagai duplikat dari `10+` — pilihan
+pemilik; jangan ditambahkan kembali.
+
+### 5.10 Slot foto hero (placeholder)
+Di Beranda, sisi kanan hero kini kembali menjadi **slot foto sinematik**
+(`.hero__visual`): bidang rasio 16/11 dengan caption overlay "Dokumentasi".
+Sesuai konvensi §5.8, slotnya permukaan polos + satu lingkaran samar
+(TANPA grid/hatching). Mengisi foto asli = ganti `<span class="hero__visual-media">`
+dengan `<img src="/foto/nama.jpg" alt="…">` — overlay gradasi gelap dan caption
+tetap bekerja. Komponen orbit interaktif lama sudah DIHAPUS. Statistik hero
+`.hero__stats` (5 kartu stat) kini **carousel di ponsel** + grid statis di
+desktop — lihat §5.11.
 
 **Teks/kalimat/slogan TIDAK boleh diubah** ketika menerapkan gaya dari `design.md` — yang
 mengikuti design.md hanya elemen visual: warna, font, radius, bayangan, komponen.
@@ -56,16 +68,35 @@ index.html                    Beranda (satu-satunya halaman dengan kelas .home)
 profil/ visi-misi/ proker/    Halaman isi
 proker/{akademik,seni,olahraga,sosial}/   4 halaman pilar
 struktur/ galeri/ berita/ gabung/ kontak/
-berita/{3 artikel}/           Tiap artikel punya URL sendiri
+berita/{slug}/                HASIL GENERATE dari content/berita.json (gitignored,
+                              jangan edit manual — lihat §12.2)
+admin/                        PANEL ADMIN (sumber UI; di produksi outputnya di-/**ADMIN_PATH**/ — lihat §12)
+
+templates/
+  berita-post.html            template halaman detail berita (placeholder %…%)
+content/
+  site.json                   SUMBER KEBENARAN beranda: event, stats, hero, periode
+  berita.json                 daftar artikel (panel admin commit file ini)
+  galeri.json                 daftar foto galeri
+  struktur.json               inti + divisi
+scripts/
+  content.js                  mesin konten: load JSON, render region @content,
+                              generate halaman berita (lihat §12)
+api/
+  admin.js                    /api/admin — sesi, aspirasi (Vercel Blob), commit konten (GitHub)
 
 src/
   main.js                     ENTRY: tema, scroll, nav, lifecycle halaman, router Swup
+  admin.js                    ENTRY TERPISAH panel admin (tanpa Swup/GSAP)
   style.css                   SATU stylesheet, 26+ bagian bernomor (lihat §6)
+  admin.css                   stylesheet panel admin (token sendiri, lihat §12)
   lib/
     motion.js                 prefersReducedMotion, isTouchOnly, safeInit()
     theme.js                  terang/gelap (localStorage: osis-theme) + meta theme-color
     scroll.js                 instance Lenis, jumpToTop/glideToTop, header state, anchor
-    animations.js             prepare/play/kill/refresh animasi, counter angka, tilt 3D
+    animations.js             prepare/play/kill/refresh animasi, tilt 3D (counter pindah ke stats.js)
+    stats.js                  carousel statistik (ponsel) + count-up ber-IO (anime.js v3)
+    aspirasi.js               form aspirasi publik di /kontak/ → /api/admin
     nav.js                    drawer mobile, dropdown Proker, penanda halaman aktif
     gallery.js                filter kategori + lightbox
   partials/
@@ -74,10 +105,11 @@ src/
     init.html                 <script> inline anti-flash & default tema
   assets/logo-sumber.png      berkas logo asli (TIDAK disajikan, hanya arsip)
 
-public/                       disalin apa adanya ke dist/ (favicon.png, logo.png, logo-texar.webp, foto/)
-vite.config.js                plugin "osis:site-blueprint" (partial, URL, sitemap)
-netlify.toml                  build + header cache
+public/                       disalin apa adanya ke dist/ (favicon.png, logo.png, logo-texar.webp, maulid.png, foto/)
+vite.config.js                plugin "osis:site-blueprint" (partial, URL, sitemap, injeksi konten)
+vercel.json                   build, cleanUrls, header noindex /admin/ + no-store /api/
 .env                          VITE_SITE_URL (domain asli untuk canonical/sitemap)
+.env.example                  template + panduan env panel admin
 ```
 
 ---
@@ -97,7 +129,7 @@ Plugin `osis:site-blueprint` melakukan empat hal **tanpa dependensi tambahan**:
    prioritas ditentukan dari kedalaman URL.
 
 Di `dev`/`preview` juga dipasang middleware yang mengalihkan `/profil` → `/profil/` (301) agar
-perilaku lokal sama dengan Netlify.
+perilaku lokal sama dengan Vercel.
 
 **Alur runtime** (`src/main.js`):
 
@@ -249,7 +281,41 @@ lightbox tetap bekerja. Jangan hapus pembungkus `figure`-nya.
 
 Konvensi anti-"AI-look" yang dipertahankan: latar section bersih tanpa tekstur grid,
 ikon kartu Sorotan ber-tint pastel per pilar (`showcase__icon--buku/seni/olahraga/sosial`),
-statistik hero berupa stat row terintegrasi (bukan kartu melayang), dan ikon tombol utama
+statistik hero berupa **carousel kartu modul di ponsel** (2 kartu/layar,
+scroll-snap bisa di-swipe manual, dot indicator, autoplay 4,5s yang pause
+saat hover/sentuh/tab tersembunyi; snap dianimasikan anime.js easeOutExpo
+via `src/lib/stats.js` — target slide dihitung dari `offsetLeft` kartu ASLI
+(bukan index × clientWidth: kartu terakhir full-width meleset gap) dan
+`scroll-snap-type` DINONAKTIFKAN selama tween lalu dinyalakan lagi tepat
+di titik snap — jangan diubah kembali ke rumus index/snap menyala saat
+animasi, keduanya bikin slide terakhir tersentak) dan **grid 3+2 statis di desktop** (`display:contents`
+pada track — jangan dihapus). Kartu: glass + border + radius 16px, ikon
+dalam badge lingkaran merah tipis (`--accent-soft`), label STACKED di bawah
+angka. `.hero__stats` WAJIB `width: 100%` + rantai `min-width: 0`
+(-stats/-track/-stat): `justify-items: start` di `hero__copy` membuat item
+shrink-to-fit dengan FLOOR min-content — dan min-content track flex tanpa
+wrap = jumlah min-content 5 kartu (±640px) → kartu terakhir (8 Sekbid)
+menjorok terpotong. CATATAN: `min-width: 0` saja TIDAK cukup (floor tetap
+min-content, bukan 0); `width: 100%`-lah yang mengikat lebar ke grid area.
+Jangan dihapus keduanya. Count-up SEMUA `[data-count]` dipicu IntersectionObserver (threshold
+0.4), bukan saat page load; `animejs` v3 kembali jadi dependensi.
+Di `/profil/`, blok 3-stat lama diganti **marquee 2 baris berlawanan arah**
+(atas→kanan 36s, bawah→kiri 44s; CSS keyframes murni `marquee-right/left`,
+track = DUA set item identik agar loop `translateX(-50%)` mulus; jarak antar
+item pakai margin-right, bukan gap — penting untuk akurasi -50%; hover
+jeda; reduced-motion mati; desktop `flex:0 0 100%` di bawah kolom profil).
+Angka marquee = fakta yang sama dengan beranda/stats-band — JANGAN mengarang
+angka baru di marquee. Tiap item marquee ber-badge ikon Lucide merah tipis
+(`marquee__icon`, 32px — bahasa sama dengan badge kartu statistik hero).
+Section profil punya ornamen **cincin konsentris** (`profile__ornament`,
+ala stempel dokumen, sudut kanan-atas, sembunyi <768px) — tipe ornamen
+ke-3 selain arc & dots; tetap patuhi batas §5.9 (maks satu ornamen per
+section). Di atasnya ada **banner pengumuman
+event** (`.hero__notice`, kartu media full-width — BUKAN countdown): gambar
+event (`public/maulid.png`, di-trim jika berganti) dicover + scrim gradasi
+gelap + teks overlay putih + tautan kaca ke /berita/; desktop `grid-column:
+1 / -1` (JANGAN dihapus — tanpa itu auto-placement menggeser kolom hero);
+perbarui gambar & teksnya langsung di markup saat event berganti
 berupa kompas beranimasi (bukan panah generik).
 
 ### 5.9 Ornamen geometris kecil (Pinterest-style)
@@ -277,7 +343,7 @@ baru di akhir (dengan nomor lanjut)** — jangan menyelipkan aturan acak di teng
 | 1 / 1b | Token terang (default) & gelap — palet design.md (krem hangat + merah tunggal) |
 | 2–4 | Reset, `.icon`, utility (`.section-tag`, `.section-title`, tombol) |
 | 5 | Header/navbar |
-| 6 | Hero Beranda (permukaan krem bersih TANPA tekstur grid, stat row tanpa kartu dengan divider vertikal, photo grid) |
+| 6 | Hero Beranda (permukaan krem bersih TANPA tekstur grid, grid kartu statistik dengan badge ikon merah tipis, photo grid) |
 | 7–11 | Section lama: profil, visi-misi, proker, CTA band, footer |
 | 12–13 | Transisi tema & media query lama (mobile-first: 480 → 768 → 1024 → 1280) |
 | 15–21 | Halaman dalam: page-hero, kartu, teks panjang, slot foto/galeri/lightbox, dropdown, footer sitemap, 404 |
@@ -348,6 +414,7 @@ Halaman Beranda adalah pengecualian: satu-satunya yang memakai pembungkus `.home
 | Toggle tema tidak bereaksi | Dulu `initTheme` ikut mati kalau boot gagal. Sekarang dipasang sebelum boot + `safeInit`. Jangan turunkan kembali ke pola "tunggu boot". |
 | Tema terasa "tidak mengubah apa pun" | Dulu ada 30+ override warna terpisah. Sekarang token-based — pastikan komponen baru memakai token, bukan warna literal. |
 | Halaman bisa digeser ke kanan di ponsel | Elemen `position: fixed` yang digeser keluar viewport tetap menambah area geser. Solusinya layer `overflow: hidden` (§5.6) + `html { overflow-x: clip }`. `hidden` pada `body` saja tidak cukup. |
+| Navbar tidak melekat saat scroll (sticky mati) | `body { overflow-x: hidden }` menjadikan body scroll container → `position: sticky` di header kehilangan acuan dan ikut tergulir. Body WAJIB `overflow-x: clip` (dengan fallback `@supports not (overflow: clip)`), bukan `hidden`. Jangan kembalikan ke `hidden`. |
 | Animasi mati di halaman kedua | ScrollTrigger perlu dibangun ulang + `refresh()` setelah DOM ditukar (dan setelah font siap). |
 | Konten hilang/blank sesaat | Elemen `[data-intro]`/`[data-reveal]` disembunyikan CSS. Kalau animasi gagal, `forceRevealAll()` wajib jalan. |
 | Tombol X menu tertimbun drawer | `z-index` tidak berlaku pada elemen `position: static`. |
@@ -422,3 +489,108 @@ Pemeriksaan rutin yang berguna:
 - Konfirmasi dulu untuk keputusan yang mahal diubah: URL/route baru, skema warna global, penambahan
   dependensi, atau penggantian font.
 - Tulis komentar dalam bahasa Indonesia dengan gaya yang sama seperti kode sekitarnya.
+
+---
+
+## 12. PANEL ADMIN & MESIN KONTEN
+
+Situs punya panel admin di **`/admin/`** (noindex, tidak masuk sitemap) untuk mengelola konten
+tanpa menyentuh kode. Semua operasi lewat satu Vercel Serverless Function:
+**`api/admin.js`** (route `/api/admin` otomatis dari lokasi file — konvensi Vercel).
+
+**Path panel dirahasiakan**: env `ADMIN_PATH` (dashboard Vercel, mis. `portal-c41f8e`).
+Saat build, output `admin/` di-rename plugin ke `/{ADMIN_PATH}/` (hook `closeBundle`),
+dan halaman itu menerima `<meta name="x-admin-path">` sebagai token API. Semua aksi
+API kecuali form publik wajib membawa header `x-admin-path` yang cocok — kalau tidak,
+API menjawab **404** (bukan 401) supaya fuzzer melihat endpoint "tidak ada". Fallback
+`admin` hanya untuk lokal/dev. Nilai env ini TIDAK pernah tertulis di repo.
+
+### 12.1 Arsitektur
+
+```
+/admin/ (src/admin.js + src/admin.css)          — UI panel (login + 5 tab)
+     │  fetch /api/admin
+     ▼
+api/admin.js (Vercel Function)                   — sesi HMAC, Blob, GitHub API
+     │                                   │
+     ▼                                   ▼
+Vercel Blob ("aspirasi/a:*")         commit content/*.json ke GitHub (main)
+     └─ data formulir aspirasi              └─ Vercel rebuild otomatis
+                                             ▼
+vite.config.js → scripts/content.js  — injeksi JSON ke region @content
+```
+
+- **Konten** (berita/galeri/struktur/beranda): tersimpan sebagai `content/*.json` di repo.
+  Panel meng-commit file itu via GitHub API → Vercel membangun ulang situs otomatis.
+- **Aspirasi** (data pengguna): tersimpan di **Vercel Blob** dengan kunci
+  `aspirasi/a:<uuid>`. TIDAK lewat GitHub — data dinamis, bukan konten.
+  Butuh Blob store yang ter-link ke project (tab Storage di dashboard Vercel):
+  env `BLOB_READ_WRITE_TOKEN` diisi otomatis oleh Vercel setelah store dibuat.
+
+### 12.2 Mesin konten (`scripts/content.js` + `vite.config.js`)
+
+- Halaman menandai area dinamis dengan region:
+
+  ```html
+  <!-- @content:start KUNCI:arg -->markup fallback<!-- @content:end -->
+  ```
+
+  Region diganti hasil renderer JSON **saat dev & build** (plugin `transformIndexHtml`,
+  order `pre`, sebelum partial). Renderer tersedia: `event-banner`, `hero-stats`,
+  `marquee-profile`, `berita-index`, `galeri-grid`, `struktur-inti`, `struktur-divisi`,
+  `berita-hero:slug`, `berita-body:slug`, `berita-lainnya:slug`.
+- **Halaman detail berita digenerate**: `generateBeritaPages()` menulis
+  `berita/<slug>/index.html` dari `templates/berita-post.html` setiap dev/build.
+  Folder `berita/*` kecuali `berita/index.html` adalah **hasil generate** — sudah di-gitignore,
+  JANGAN diedit manual dan JANGAN commit file di bawahnya. Slug dihapus di JSON → halamannya
+  hilang otomatis di build berikutnya.
+- `body` berita adalah **HTML dari panel (dipercaya)** — tidak di-escape. Semua nilai lain
+  di-escape lewat `esc()`.
+
+### 12.3 Struktur `content/*.json`
+
+| File          | Isi                                                                     |
+| ------------- | ----------------------------------------------------------------------- |
+| `site.json`   | `event` (banner beranda), `stats` (5 angka), `hero` (eyebrow/judul/deskripsi), `periode` |
+| `berita.json` | array: `slug, title, shortTitle, category, date (YYYY-MM-DD), lead, excerpt, image, body (HTML)` — urut terbaru dulu |
+| `galeri.json` | array: `category (akademik|seni|olahraga|sosial), caption, image`        |
+| `struktur.json` | `inti` (4 orang) + `divisi` (8 kartu, `icon` = inner-SVG Lucide)       |
+
+### 12.4 Env yang wajib diisi di dashboard Vercel
+
+`ADMIN_PASS_SHA256`, `ADMIN_SESSION_KEY`, `GITHUB_TOKEN`, `GITHUB_REPO`, `GITHUB_BRANCH`,
+`ADMIN_PATH` (panduan generate ada di `.env.example` dan §12.5). Tanpa env ini, panel login gagal atau
+tidak bisa menyimpan. Form aspirasi publik butuh Blob store aktif (env
+`BLOB_READ_WRITE_TOKEN` otomatis dari tab Storage).
+
+### 12.5 Cara menyalakan (sekali saja, oleh pemilik repo)
+
+1. Generate: `node -e "console.log(require('crypto').createHash('sha256').update('PASSWORDMU').digest('hex'))"`
+   dan `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`.
+2. Buat GitHub fine-grained token (Contents: Read & write, repo ini saja).
+3. Buat **Blob store**: dashboard Vercel → tab Storage → Create → Blob → connect ke
+   project ini (env `BLOB_READ_WRITE_TOKEN` terisi otomatis).
+4. Vercel dashboard → Project → Settings → Environment Variables → isi lima variabel
+   di atas (termasuk `ADMIN_PATH` — lihat panduan memilih nama di `.env.example`).
+5. Redeploy (push apa pun). Panel siap di `/admin/`.
+
+### 12.6 Aturan wajib terkait panel
+
+- **Jangan** menaruh password plaintext di env — hanya sha256-nya. Cookie sesi = HMAC
+  timestamp HttpOnly, masa berlaku 12 jam.
+- **Jangan** menambah aksi API baru di luar pola auth: semua aksi selain
+  `login/logout/me/aspirasi-public` wajib di belakang `isAuthed()`.
+- **Jangan** menghapus validasi `JSON.parse` di `content-save` — JSON rusak akan
+  melumpuhkan build produksi.
+- **Jangan** menjadikan `api/` diproses Vite — sudah di SKIP_DIRS (folder function
+  Vercel, bukan halaman).
+- **Jangan** memasukkan panel admin ke sitemap; sumber `admin/` sudah difilter di
+  `siteBlueprint`, dan di produksi foldernya berubah menjadi `/{ADMIN_PATH}/`.
+- **Jangan** mengganti nama folder `admin/` di repo — yang rahasia itu env `ADMIN_PATH`;
+  rename output terjadi di hook `closeBundle` (memutasi `bundle` langsung tidak didukung
+  rolldown-vite).
+- Vercel Blob butuh `BLOB_READ_WRITE_TOKEN` (otomatis saat store ter-link). Di lokal,
+  function bisa diuji dengan `vercel dev` (CLI), bukan `vite dev`; blob lokal perlu
+  `vercel link` + `vercel env pull` dulu.
+- Font/kelas `.field`, `.aspirasi-form` dipakai dua stylesheet: `style.css` (situs) dan
+  `admin.css` (panel) — perubahan bentuk field harus diambil keduanya.

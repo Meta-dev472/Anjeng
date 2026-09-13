@@ -405,8 +405,21 @@ body {
   color: var(--text);
   line-height: 1.6;
   background-color: var(--bg);
-  overflow-x: hidden;
+  /* WAJIB `clip`, bukan `hidden`: `overflow-x: hidden` menjadikan body
+     scroll container dan MEMBUAT position:sticky di header berhenti
+     bekerja (navbar ikut tergulir). `clip` mengunci scroll horizontal
+     sama rapi tanpa efek samping itu. Fallback browser lama di bawah. */
+  overflow-x: clip;
   overscroll-behavior-x: none; /* cegah pan horizontal di iOS */
+}
+
+/* Browser tanpa `overflow: clip` (Safari <16, Chrome <90): fallback ke
+   `hidden`. Navbar sticky tidak berfungsi di sana — degradasi anggun,
+   pengunjung dengan browser modern (mayoritas) tetap dapat navbar melekat. */
+@supports not (overflow: clip) {
+  body {
+    overflow-x: hidden;
+  }
 }
 
 img {
@@ -937,12 +950,18 @@ input:focus-visible,
   max-width: var(--container-width);
   margin-inline: auto;
   display: grid;
+  /* minmax(0,1fr): kolom implisit `auto` akan melar mengikuti max-content
+     anak terlebar (track carousel ±2,5 layar) → semua anak ikut terpotong
+     di kanan. Jangan ganti kembali ke tanpa grid-template-columns. */
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-lg);
   align-items: start;
 }
 
 .hero__copy {
   display: grid;
+  /* Sama seperti container: cegah kolom implisit melar karena track carousel */
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-md);
   justify-items: start;
 }
@@ -955,8 +974,10 @@ input:focus-visible,
 .hero__headline { order: 2; }
 .hero__subtext { order: 3; }
 .hero__actions { order: 4; }
-.hero__micro-metrics { order: 5; }
-.hero__stats { order: 6; }
+/* Statistik (order 4): lima kartu kredibilitas (grid 2×2+1 di ponsel,
+   wrap 3+2 di desktop) — langsung setelah deskripsi.
+   Blok "mini metrics" terpisah sudah DIHAPUS (digabung ke sini). */
+.hero__stats { order: 4; }
 .hero__gallery { order: 7; }
 .hero__copy > .btn--link { order: 8; }
 .hero__scroll { order: 9; }
@@ -974,44 +995,6 @@ input:focus-visible,
   font-size: 0.75rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-}
-
-/* --- Mini metrics di bawah tombol: kredibilitas instan --- */
-.hero__micro-metrics {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.4rem 1.4rem;
-}
-
-.hero__metric {
-  display: flex;
-  align-items: baseline;
-  gap: 0.45rem;
-}
-
-.hero__metric-number {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 1.05rem;
-  color: var(--accent-ink);
-  font-variant-numeric: tabular-nums;
-}
-
-.hero__metric-label {
-  font-size: 0.82rem;
-  color: var(--hero-text-faint);
-}
-
-/* Pemisah titik antar metrik (kecuali terakhir) */
-.hero__metric:not(:last-child)::after {
-  content: '';
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background-color: var(--hero-border);
-  margin-left: 1.4rem;
-  align-self: center;
 }
 
 .hero__eyebrow::before {
@@ -1071,14 +1054,17 @@ input:focus-visible,
 
 /* --- Slot foto sinematik di sisi kanan hero --- */
 /* Cara mengisi foto asli: ganti <span class="hero__visual-media"> dengan
-   <img src="/foto/nama-file.jpg" alt="...">. Overlay gradasi gelap dan
-   caption di bawahnya tetap bekerja tanpa perubahan lain. */
+   <img src="/foto/nama-file.jpg" alt="..."> — overlay gradasi gelap dan
+   caption di bawahnya tetap bekerja tanpa ubah apa pun. */
 .hero__visual {
   position: relative;
   overflow: hidden;
   aspect-ratio: 16 / 11;
+  width: 100%;
   border: 1px solid var(--hero-border);
   border-radius: var(--radius-md);
+  background-color: var(--surface-raised);
+  box-shadow: var(--hero-shadow);
 }
 
 .hero__visual-media,
@@ -1090,8 +1076,9 @@ input:focus-visible,
   object-fit: cover;
 }
 
-/* Komposisi abstrak monokrom sebagai pengisi sementara: gradasi + grid
-   halus + monogram OSIS, supaya bidangnya tidak terasa kosong. */
+/* Pengisi sementara TANPA arsir/grid khas template AI (konvensi §5.8):
+   permukaan polos + satu lingkaran samar. Begitu foto asli dipasang
+   (span diganti <img>), semua ini hilang otomatis. */
 .hero__visual-media {
   display: block;
   background-image:
@@ -1099,29 +1086,14 @@ input:focus-visible,
     var(--hero-visual-bg);
 }
 
-/* Watermark logo OSIS (bukan lagi monogram teks “OT”): di-mask dari
-   public/logo.png sehingga ikut warna token dan tetap elegan di atas
-   gradasi. Ganti logo di public/logo.png → watermark ikut berubah. */
-.hero__visual-media::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-color: var(--hero-visual-mark);
-  -webkit-mask: url('/logo.png') center / min(58%, 240px) no-repeat;
-  mask: url('/logo.png') center / min(58%, 240px) no-repeat;
-}
-
-/* Arcs organik menggantikan grid merah khas template: satu lingkaran
-   konsentris samar di sudut bawah — praktis tak terlihat, hilang total
-   begitu foto asli dipasang (span diganti <img>). */
 .hero__visual-media::after {
   content: '';
   position: absolute;
   inset: 0;
   background-image: radial-gradient(
-    circle at 88% 94%,
-    var(--hero-visual-mark) 0 20%,
-    transparent 20.7%
+    circle at 82% 88%,
+    var(--hero-visual-mark) 0 30%,
+    transparent 30.7%
   );
 }
 
@@ -1275,45 +1247,113 @@ input:focus-visible,
 /* --- Statistik singkat (kredibilitas) di bawah paragraf hero ---
    Tiap kartu punya ikon SVG (Lucide: pengguna, kalender, piala) dengan
    micro-interaction: kartu terangkat & ikon berputar sedikit saat disentuh. */
-/* --- Statistik: integrated stat row ala design.md ---
-   PONSEL (<768px, gaya dasar): LEDGER VERTIKAL — tiap baris = ikon mini +
-   angka besar di kiri, label kecil rata kanan, dipisah garis rambut
-   horizontal. Jauh lebih rapi di layar sempit daripada baris yang dipaksa
-   sejajar lalu wrap tak tentu.
-   DESKTOP (≥768px): baris horizontal dengan divider vertikal (override
-   di media query 768px, bagian 26b) — dua penataan sengaja berbeda. */
+/* --- Statistik: carousel kartu (ponsel) / grid modul (desktop) ---
+   PONSEL (<768px, gaya dasar): TRACK SWIPEABLE — 2 kartu per layar,
+   scroll-snap native (bisa di-swipe manual), animasi geser halus via
+   anime.js (easeOutExpo) + dot indicator + autoplay 4,5 detik yang
+   pause saat hover/sentuh. Semua logika di src/lib/stats.js.
+   DESKTOP (≥768px, bagian 26b): track jadi display:contents sehingga
+   kartu-kartu langsung menjadi item grid 3+2 — tanpa geser. */
 .hero__stats {
-  display: flex;
-  flex-direction: column;
-  margin-top: 0.35rem;
-  border-bottom: 1px solid var(--hero-border);
+  position: relative;
+  /* KRUSIAL (regresi terverifikasi): hero__copy memakai justify-items:start
+     → item diukur shrink-to-fit yang FLOOR-nya min-content — dan min-content
+     track flex tanpa wrap = jumlah min-content 5 kartu (±640px). min-width:0
+     saja TIDAK cukup (floor tetap min-content, bukan 0) → kartu terakhir
+     (8 Sekbid) menjorok & terpotong. width:100% menyelesaikan lebar
+     TERHADAP GRID AREA — mengabaikan intrinsik. Jangan dihapus. */
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin-top: 0.75rem;
 }
 
+/* Track: satu sumbu horizontal, snap per kartu, scrollbar disembunyikan */
+.hero__stats-track {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  min-width: 0; /* bagian dari rantai penyusutan — lihat catatan di atas */
+}
+
+.hero__stats-track::-webkit-scrollbar {
+  display: none;
+}
+
+/* Kartu stat: latar glass lembut + border tipis + radius md (16px);
+   2 kartu per layar (kartu ke-5 memenuhi satu layar sendiri) */
 .hero__stat {
   display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  padding: 0.85rem 0;
-  border-top: 1px solid var(--hero-border);
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.3rem;
+  flex: 0 0 calc(50% - 0.25rem);
+  scroll-snap-align: start;
+  padding: 0.75rem 0.85rem;
+  background: var(--hero-glass);
+  border: 1px solid var(--hero-border);
+  border-radius: var(--radius-md);
+  min-width: 0; /* kontribusi min-content kartu = 0 → blok bisa menyusut */
 }
 
-/* Ikon mini menyatu di samping angka — tanpa kotak terpisah */
+/* Kartu kelima: satu layar penuh, tersusun baris (badge + angka + label) */
+.hero__stat:nth-child(5) {
+  flex-basis: 100%;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+/* Dot indicator: posisi slide + jumlah halaman; dibangun stats.js
+   (tanpa JS: tak ada dots kosong, swipe tetap bekerja) */
+.hero__stats-dots {
+  display: flex;
+  gap: 0.45rem;
+  margin-top: 0.8rem;
+}
+
+.hero__stats-dot {
+  width: 6px;
+  height: 6px;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: var(--hero-border);
+  cursor: pointer;
+  transition: background-color 0.3s ease, width 0.3s ease;
+}
+
+.hero__stats-dot.is-active {
+  width: 18px;
+  background: var(--accent-ink);
+}
+
+/* Visual anchor: badge lingkaran berlatar merah tipis (accent-soft) —
+   padu dengan aksen merah pada headline. Ikon di dalamnya berwarna merah. */
 .hero__stat-icon {
   display: flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
-  width: 16px;
-  height: 16px;
-  color: var(--hero-text-faint);
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+  transition: background-color 0.3s ease;
 }
 
 .hero__stat-icon .icon {
-  width: 16px;
-  height: 16px;
+  width: 15px;
+  height: 15px;
 }
 
 .hero__stat-number {
   font-family: var(--font-display);
-  font-size: clamp(1.4rem, 5.2vw, 1.6rem);
+  font-size: clamp(1.35rem, 5vw, 1.55rem);
   font-weight: 700;
   letter-spacing: -0.02em;
   line-height: 1.1;
@@ -1322,23 +1362,30 @@ input:focus-visible,
   transition: color 0.3s ease;
 }
 
-/* Label didorong ke tepi kanan baris — keseimbangan ala buku besar */
+/* Label STACKED di bawah angka — dekat, kecil, tidak melayang ke kanan */
 .hero__stat-label {
-  margin-left: auto;
-  text-align: right;
   color: var(--hero-text-faint);
-  font-size: 0.78rem;
-  line-height: 1.35;
+  font-size: 0.72rem;
+  line-height: 1.3;
 }
 
-/* Hover: angka menyala merah — interaksi tanpa kartu, ringan */
+/* Kartu ke-5 (baris): label menyamping setelah angka, bukan di bawah */
+.hero__stat:nth-child(5) .hero__stat-label {
+  margin-left: 0.1rem;
+}
+
+/* Hover: angka & badge menyala — border kartu ikut merah tipis */
 .hero__stat:hover .hero__stat-number {
   color: var(--accent-ink);
 }
 
-/* Ikon mini ikut menyala saat stat disentuh — menyatu dengan angkanya */
 .hero__stat:hover .hero__stat-icon {
-  color: var(--accent-ink);
+  background: var(--accent-ink);
+  color: #ffffff;
+}
+
+.hero__stat:hover {
+  border-color: var(--accent-ink);
 }
 
 /* --- Petunjuk gulir --- */
@@ -1416,6 +1463,148 @@ input:focus-visible,
   }
 }
 
+/* --- Banner pengumuman event terdekat (BUKAN countdown) ---
+   Kartu media: gambar event dicover penuh, lapisan gradasi gelap
+   menjaga kontras teks putih. PONSEL: kompak — lebar mengikuti isi
+   (fit-content), tinggi pendek, tidak memenuhi lebar layar. Gambar
+   zoom halus saat hover — tanpa lift/kartu terangkat. Perbarui gambar
+   & teks langsung di markup saat event berganti. */
+.hero__notice {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.8rem;
+  width: fit-content;
+  max-width: 100%;
+  min-height: 118px;
+  padding: 0.8rem 0.95rem;
+  border: 1px solid var(--hero-border);
+  border-radius: var(--radius-md);
+  isolation: isolate;
+}
+
+/* Gambar event — lapisan paling belakang dalam stacking context banner */
+.hero__notice-media {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.hero__notice:hover .hero__notice-media {
+  transform: scale(1.04);
+}
+
+/* Gradasi gelap dari bawah — teks tetap terbaca di atas artwork apa pun */
+.hero__notice-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.72) 0%,
+    rgba(0, 0, 0, 0.34) 55%,
+    rgba(0, 0, 0, 0.12) 100%
+  );
+}
+
+.hero__notice-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.hero__notice-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+/* Ikon sparkle memakai aksen tema — terbaca di atas scrim gelap */
+.hero__notice-tag .icon {
+  width: 12px;
+  height: 12px;
+  color: var(--accent-ink);
+}
+
+.hero__notice-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.05rem, 2.6vw, 1.3rem);
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.15;
+}
+
+/* Tautan pill kaca di atas gambar — hover menyala merah aksen */
+.hero__notice-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-shrink: 0;
+  padding: 0.45rem 0.9rem;
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  color: #ffffff;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.hero__notice-link:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.hero__notice-link .icon {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.3s ease;
+}
+
+.hero__notice-link:hover .icon {
+  transform: translateX(3px);
+}
+
+/* Desktop: banner membentang DI ATAS kedua kolom grid hero. TANPA ini
+   auto-placement memasukkan banner sebagai kolom pertama dan menggeser
+   copy/orbit — jangan dihapus. width:100% menimpa fit-content ponsel
+   agar banner melar penuh dua kolom. */
+@media (min-width: 1024px) {
+  .hero__notice {
+    grid-column: 1 / -1;
+    width: 100%;
+    min-height: 180px;
+  }
+}
+
+/* Ponsel sangat sempit (<400px): teks tautan disembunyikan, panah cukup */
+@media (max-width: 400px) {
+  .hero__notice-link-text {
+    display: none;
+  }
+
+  .hero__notice-link {
+    padding: 0.45rem 0.6rem;
+  }
+}
+
 /* --- Dekorasi blob abstrak (warna via token --deco-*) --- */
 .hero__decoration {
   position: absolute;
@@ -1473,11 +1662,53 @@ input:focus-visible,
    7. PROFIL SINGKAT SECTION (mengikuti tema)
    ========================================================================== */
 .profile {
+  position: relative;
+  overflow: hidden;
   padding: var(--space-2xl) var(--space-sm);
   background-color: var(--bg);
 }
 
+/* Ornamen khas profil: cincin konsentris ala stempel dokumen — tipe
+   berbeda dari arc/dots (§5.9, jatahnya sudah terpakai di 3 section).
+   Dua cincin netral + cincin terdalam merah tipis (accent-ring).
+   Tersembunyi di ponsel — konten profil butuh lebar penuh. */
+.profile__ornament {
+  position: absolute;
+  z-index: 0;
+  top: -34px;
+  right: -34px;
+  width: 180px;
+  height: 180px;
+  border: 1.5px solid var(--border);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.profile__ornament::before {
+  content: '';
+  position: absolute;
+  inset: 22px;
+  border: 1.5px solid var(--border);
+  border-radius: 50%;
+}
+
+.profile__ornament::after {
+  content: '';
+  position: absolute;
+  inset: 44px;
+  border: 1.5px solid var(--accent-ring);
+  border-radius: 50%;
+}
+
+@media (max-width: 767px) {
+  .profile__ornament {
+    display: none;
+  }
+}
+
 .profile__container {
+  position: relative;
+  z-index: 1; /* konten di atas ornamen */
   max-width: var(--container-width);
   margin-inline: auto;
   display: flex;
@@ -1532,16 +1763,62 @@ input:focus-visible,
 }
 
 /* --- Statistik singkat (kartu mengikuti tema) --- */
-.profile__stats {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-md);
+/* --- Marquee statistik (halaman Profil): dua baris berlawanan arah ---
+   Atas bergerak ke KANAN, bawah ke KIRI, kecepatan berbeda (organik).
+   Loop mulus: track = dua set item identik, dianimasikan translateX
+   0 → -50% (bawah: -50% → 0). Jarak pakai margin-right per item (bukan
+   gap) agar -50% tepat satu set — tanpa lompatan tiap putaran.
+   Hover: jeda. reduced-motion: animasi dimatikan (blok preferensi). */
+.marquee {
+  display: grid;
+  gap: 0.6rem;
+  overflow: hidden;
 }
 
-.profile__stat {
+/* Desktop: container profil flex-ROW (media 40% + teks) — marquee wajib
+   satu baris penuh sendiri (wrap), bukan kolom ketiga yang terjepit */
+
+.marquee__row {
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+}
+
+.marquee__track {
   display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
+  width: max-content;
+  animation: marquee-right var(--marquee-dur, 36s) linear infinite;
+}
+
+/* Baris bawah: arah & kecepatan berbeda — terasa hidup, bukan mesin */
+.marquee__row--left .marquee__track {
+  animation-name: marquee-left;
+  --marquee-dur: 44s;
+}
+
+.marquee__row:hover .marquee__track {
+  animation-play-state: paused;
+}
+
+@keyframes marquee-right {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@keyframes marquee-left {
+  from { transform: translateX(-50%); }
+  to   { transform: translateX(0); }
+}
+
+/* Item: kartu kecil — bahasa visual sama dengan kartu stat hero.
+   Susunan horizontal: badge ikon + kolom teks (angka di atas label). */
+.marquee__item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.65rem;
+  flex-shrink: 0;
+  margin-right: 0.6rem;
   background-color: var(--surface-raised);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
@@ -1549,20 +1826,47 @@ input:focus-visible,
   transition: border-color 0.3s ease, background-color 0.3s ease;
 }
 
-.profile__stat:hover {
+.marquee__item:hover {
   border-color: var(--border-strong);
 }
 
-.profile__stat-number {
+/* Badge ikon: lingkaran merah tipis — identik dengan badge statistik hero */
+.marquee__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+}
+
+.marquee__icon .icon {
+  width: 16px;
+  height: 16px;
+}
+
+.marquee__text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.marquee__number {
   font-family: var(--font-heading);
   font-size: 1.7rem;
   font-weight: 700;
   color: var(--heading);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
 }
 
-.profile__stat-label {
+.marquee__label {
   font-size: 0.85rem;
   color: var(--text-muted);
+  white-space: nowrap;
 }
 
 /* ==========================================================================
@@ -1961,13 +2265,14 @@ html.theme-anim .btn--primary,
 html.theme-anim .theme-toggle,
 html.theme-anim .profile,
 html.theme-anim .profile__stat,
+html.theme-anim .marquee__item,
+html.theme-anim .profile__ornament,
 html.theme-anim .profile__media-box,
 html.theme-anim .proker,
 html.theme-anim .proker-card,
 html.theme-anim .proker-card__icon,
 html.theme-anim .hero,
 html.theme-anim .hero__decoration,
-html.theme-anim .hero__metric-number,
 html.theme-anim .hero__gallery-head .icon,
 html.theme-anim .vision::before,
 html.theme-anim .vision::after {
@@ -1995,8 +2300,13 @@ html.theme-anim .vision::after {
 
   .profile__container {
     flex-direction: row;
+    flex-wrap: wrap; /* marquee (basis 100%) turun ke baris kedua */
     align-items: center;
     gap: var(--space-xl);
+  }
+
+  .marquee {
+    flex: 0 0 100%;
   }
 
   .profile__media {
@@ -3754,6 +4064,10 @@ html.theme-anim .showcase__icon,
 html.theme-anim .index__item,
 html.theme-anim .hero__stat,
 html.theme-anim .hero__stat-icon,
+html.theme-anim .hero__notice,
+html.theme-anim .hero__notice-link,
+html.theme-anim .hero__visual,
+html.theme-anim .hero__visual-media,
 html.theme-anim .hero__tile,
 html.theme-anim .hero__tile-media,
 html.theme-anim .btn--outline,
@@ -3786,44 +4100,60 @@ html.theme-anim .btn--outline-red {
     width: auto;
   }
 
-  /* Statistik hero (desktop): baris horizontal — angka di atas label,
-     divider vertikal tipis; sengaja berbeda dari ledger vertikal ponsel */
+  /* Statistik hero (desktop): TANPA carousel — track dibubarkan
+     (display: contents) sehingga kartu-kartu langsung menjadi item
+     grid 3+2 yang wrap rapi. Dots disembunyikan: tak ada geser di sini. */
+  .hero__stats-track {
+    display: contents;
+  }
+
   .hero__stats {
-    flex-direction: row;
-    align-items: stretch;
-    gap: var(--space-lg);
-    max-width: 560px;
-    border-top: 1px solid var(--hero-border);
-    border-bottom: none;
-    padding-top: var(--space-sm);
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 0.6rem;
+    max-width: 640px;
+  }
+
+  .hero__stats-dots {
+    display: none;
   }
 
   .hero__stat {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.2rem;
-    padding: 0;
-    border-top: none;
+    padding: 0.6rem 0.8rem;
   }
 
-  /* Divider vertikal tipis di antara angka — ala stats bar design.md */
-  .hero__stat + .hero__stat {
-    border-left: 1px solid var(--hero-border);
-    padding-left: var(--space-md);
+  /* 6 kolom fiktif: kartu 1-3 masing-masing span 2, kartu 4-5 span 3
+     → baris pertama berisi 3 kartu, baris kedua 2 kartu, lebar proporsional */
+  .hero__stat:nth-child(-n + 3) {
+    grid-column: span 2;
+  }
+
+  .hero__stat:nth-child(n + 4) {
+    grid-column: span 3;
+  }
+
+  /* Kartu kelima kembali setengah baris (pasangan kartu ke-4) */
+  .hero__stat:nth-child(5) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.3rem;
+  }
+
+  .hero__stat:nth-child(5) .hero__stat-label {
+    margin-left: 0;
   }
 
   .hero__stat-number {
-    font-size: clamp(1.45rem, 3.2vw, 1.9rem);
+    font-size: clamp(1.45rem, 2.6vw, 1.75rem);
   }
 
   .hero__stat-label {
-    margin-left: 0;
-    text-align: left;
+    font-size: 0.75rem;
   }
 
-  /* "18 Angkatan": geser optis kecil agar sejajar dengan angka lain */
-  .hero__stat:nth-child(3) .hero__stat-number {
-    margin-left: -0.22rem;
+  .hero__stat-icon {
+    width: 28px;
+    height: 28px;
   }
 
   .stats-band {
@@ -3847,10 +4177,6 @@ html.theme-anim .btn--outline-red {
     grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
     align-items: center;
     gap: var(--space-xl);
-  }
-
-  .hero__visual {
-    aspect-ratio: 4 / 5;
   }
 
   /* Peta halaman: judul menetap, daftar bergulir di sebelahnya */
@@ -3880,12 +4206,27 @@ html.theme-anim .btn--outline-red {
   }
 
   .hero__stat:hover .hero__stat-icon {
-    color: var(--hero-text-faint);
+    background: var(--accent-soft);
+    color: var(--accent-ink);
+  }
+
+  .hero__stat:hover {
+    border-color: var(--hero-border);
   }
 
   .hero__tile:hover .hero__tile-media,
   .hero__tile:hover img {
     transform: none;
+  }
+
+  /* Zoom gambar banner event juga mati — hanya informasi, bukan gerak */
+  .hero__notice:hover .hero__notice-media {
+    transform: none;
+  }
+
+  /* Marquee profil berhenti total — item tetap terbaca sebagai kartu statis */
+  .marquee__track {
+    animation: none;
   }
 
   /* Reveal foto juga dinonaktifkan: langsung tampil utuh */
@@ -3897,4 +4238,93 @@ html.theme-anim .btn--outline-red {
   .index-head {
     position: static;
   }
+}
+
+/* ==========================================================================
+   FORM ASPIRASI PUBLIK — /kontak/ (Kirim Aspirasi)
+   ========================================================================== */
+
+.aspirasi-form__hp {
+  position: absolute;
+  left: -9999px;
+  height: 0;
+  overflow: hidden;
+}
+
+.aspirasi-form .field {
+  display: block;
+  margin-bottom: 0.9rem;
+}
+
+.aspirasi-form .field__label {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--heading);
+  margin-bottom: 0.3rem;
+}
+
+.aspirasi-form .field__optional {
+  font-weight: 400;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+}
+
+.aspirasi-form .field__input,
+.aspirasi-form .field__input--area {
+  width: 100%;
+  font: inherit;
+  font-size: 0.9rem;
+  color: var(--heading);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.55rem 0.7rem;
+  transition: border-color 0.15s ease;
+}
+
+.aspirasi-form .field__input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.aspirasi-form .field__input--area {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.aspirasi-form .field__hint {
+  margin: 0.3rem 0 0;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.aspirasi-form__status {
+  min-height: 1.2em;
+  margin: 0 0 0.6rem;
+  font-size: 0.82rem;
+}
+
+.aspirasi-form__status[data-tone='ok'] {
+  color: #2e8b57;
+}
+
+.aspirasi-form__status[data-tone='err'] {
+  color: #d64545;
+}
+
+.aspirasi-form__submit {
+  width: 100%;
+}
+
+.aspirasi-form__alt {
+  margin: 0.9rem 0 0;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.aspirasi-form__alt a {
+  color: var(--accent);
 }

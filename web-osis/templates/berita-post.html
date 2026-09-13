@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="id" data-page="berita">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>%TITLE% | OSIS SMK Texar</title>
+  <meta name="description" content="%DESCRIPTION%">
+  <link rel="canonical" href="%PAGE_URL%">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="OSIS SMK Texar Karawang">
+  <meta property="og:locale" content="id_ID">
+  <meta property="og:title" content="%TITLE%">
+  <meta property="og:description" content="%DESCRIPTION%">
+  <meta property="og:url" content="%PAGE_URL%">
+  <meta property="article:published_time" content="%DATE%">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="%TITLE%">
+  <meta name="twitter:description" content="%DESCRIPTION%">
+  <meta name="theme-color" content="#ffffff">
+
+  <link rel="icon" type="image/png" href="/favicon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- @include init.html -->
+
+  <script type="module" src="/src/main.js"></script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    "headline": "%TITLE%",
+    "description": "%DESCRIPTION%",
+    "datePublished": "%DATE%",
+    "dateModified": "%DATE%",
+    "inLanguage": "id",
+    "mainEntityOfPage": "%PAGE_URL%",
+    "articleSection": "%CATEGORY%",
+    "author": { "@type": "Organization", "name": "OSIS SMK Texar Karawang" },
+    "publisher": { "@type": "Organization", "name": "OSIS SMK Texar Karawang" }
+  }
+  </script>
+</head>
+<body>
+  <!-- @include header.html -->
+
+  <main id="swup">
+
+    <!-- ==========================================================
+         PAGE HERO ARTIKEL  (diisi dari content/berita.json)
+    =========================================================== -->
+    <section class="page-hero">
+      <div class="page-hero__container">
+        <!-- @content:start berita-hero:%SLUG% -->fallback<!-- @content:end -->
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         ISI ARTIKEL  (body HTML dari panel admin — dipercaya)
+    =========================================================== -->
+    <section class="section">
+      <div class="container">
+        <!-- @content:start berita-body:%SLUG% -->fallback<!-- @content:end -->
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         BERITA LAINNYA
+    =========================================================== -->
+    <section class="section section--soft" aria-labelledby="lain-title">
+      <div class="container">
+
+        <div class="section__head" data-reveal>
+          <span class="section-tag">Baca Juga</span>
+          <h2 class="section-title" id="lain-title">Berita Lainnya</h2>
+        </div>
+
+        <!-- @content:start berita-lainnya:%SLUG% -->fallback<!-- @content:end -->
+
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         CTA
+    =========================================================== -->
+    <section class="cta-band">
+      <div class="cta-band__container" data-reveal>
+        <h2 class="cta-band__title">Siap Mendaftar?</h2>
+        <p class="cta-band__text">Baca alur dan syaratnya di halaman pendaftaran, lalu isi formulir yang dibagikan ke kelasmu.</p>
+        <div class="btn-row btn-row--center">
+          <a href="/gabung/" class="btn btn--secondary">Halaman Pendaftaran</a>
+          <a href="/struktur/" class="btn btn--ghost">Lihat Delapan Divisi</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- @include footer.html -->
+</body>
+</html>

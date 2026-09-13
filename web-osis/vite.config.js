@@ -1,6 +1,7 @@
 import { defineConfig, loadEnv } from 'vite';
-import { readFileSync, readdirSync, existsSync } from 'node:fs';
+import { readFileSync, readdirSync, existsSync, renameSync, mkdirSync, rmSync } from 'node:fs';
 import { resolve, relative, join, sep } from 'node:path';
+import { loadContent, injectContent, generateBeritaPages } from './scripts/content.js';
 
 // ==========================================================================
 // OSIS SMK TEXAR KARAWANG — KONFIGURASI BUILD
@@ -18,7 +19,8 @@ import { resolve, relative, join, sep } from 'node:path';
 const ROOT = process.cwd();
 
 // Folder yang tidak dipindai sebagai halaman
-const SKIP_DIRS = new Set(['node_modules', 'dist', '.git', 'src', 'public']);
+// ('templates' berisi template mentah berita — bukan halaman yang layak disajikan)
+const SKIP_DIRS = new Set(['node_modules', 'dist', '.git', 'src', 'public', 'templates', 'content', 'scripts', 'api']);
 
 // Dipakai bila .env belum diisi — ganti dengan domain asli saat deploy
 const DEFAULT_SITE_URL = 'https://osis.smktexarkarawang.sch.id';
@@ -60,10 +62,19 @@ function pagePriority(pagePath) {
 /* --------------------------------------------------------------------------
    Plugin: partial HTML + URL per halaman (canonical/OG) + sitemap & robots
    -------------------------------------------------------------------------- */
-function siteBlueprint(htmlFiles, siteUrl) {
+function siteBlueprint(htmlFiles, siteUrl, adminPath) {
+  // Panel admin di-deploy ke PATH RAHASIA dari env ADMIN_PATH (nama folder
+  // output di-rename saat build). Sumbernya tetap admin/index.html di repo —
+  // yang dirahasiakan hanya path produksi. Fallback 'admin' = lokal/dev.
+  const ADMIN_SRC = resolve(ROOT, 'admin', 'index.html');
+
   const pages = htmlFiles
     .map((file) => ({ file, path: toPagePath(file) }))
-    .filter((page) => page.path !== '/404.html') // 404 tidak masuk sitemap
+    .filter(
+      (page) =>
+        page.path !== '/404.html' && // 404 tidak masuk sitemap
+        resolve(page.file) !== ADMIN_SRC // panel admin tidak masuk sitemap
+    )
     .sort((a, b) => a.path.localeCompare(b.path));
 
   const cache = new Map();
@@ -84,8 +95,8 @@ function siteBlueprint(htmlFiles, siteUrl) {
   };
 
   // Di dev/preview, Vite tidak otomatis mengarahkan /profil → /profil/ seperti
-  // Netlify. Middleware kecil ini menyamakan perilakunya supaya apa yang
-  // diuji di lokal sama dengan yang terjadi di produksi.
+  // Vercel (trailingSlash: true). Middleware kecil ini menyamakan perilakunya
+  // supaya apa yang diuji di lokal sama dengan yang terjadi di produksi.
   const prettyUrlRedirect = () => (req, res, next) => {
     const [pathname, search] = req.url.split('?');
     if (pathname === '/' || pathname.endsWith('/')) return next();
@@ -111,16 +122,31 @@ function siteBlueprint(htmlFiles, siteUrl) {
       server.middlewares.use(prettyUrlRedirect());
     },
 
-    // 1. Partial + URL halaman (jalan di dev maupun build)
+    // 0. Konten dari panel admin (content/*.json) disuntikkan ke region
+    //    @content — JALAN SEBELUM partial agar hasil render ikut menemani
+    //    header/footer. Berita detail juga digenerate ulang setiap build.
     transformIndexHtml: {
       order: 'pre',
       handler(html, ctx) {
         const pagePath = toPagePath(ctx.filename);
         const pageUrl = siteUrl + pagePath;
 
-        const withPartials = inlinePartials(html)
+        const withContent = injectContent(html, loadContent());
+
+        let withPartials = inlinePartials(withContent)
           .replaceAll('%SITE_URL%', siteUrl)
           .replaceAll('%PAGE_URL%', pageUrl);
+
+        // Halaman admin: sisipkan token path rahasia. Meta ini HANYA ada di
+        // halaman admin — siapa pun yang tahu path rahasia otomatis tahu
+        // token untuk memanggil /api/admin; yang tidak tahu path, dapat 404.
+        if (resolve(ctx.filename) === ADMIN_SRC) {
+          withPartials = withPartials.replace(
+            '</head>',
+            `  <meta name="x-admin-path" content="${adminPath}">\n  </head>`
+          );
+          return withPartials;
+        }
 
         if (pagePath !== '/404.html' && !withPartials.includes(pageUrl)) {
           this.warn(
@@ -137,6 +163,7 @@ function siteBlueprint(htmlFiles, siteUrl) {
       const lastmod = new Date().toISOString().slice(0, 10);
 
       const urls = pages
+        .filter((page) => page.path.startsWith('/admin') === false) // /admin/ tidak diindeks
         .map(
           (page) =>
             `  <url>\n` +
@@ -168,6 +195,21 @@ function siteBlueprint(htmlFiles, siteUrl) {
 
       this.info?.(`sitemap.xml & robots.txt dibuat untuk ${pages.length} halaman.`);
     },
+
+    // 3. Rename output admin → path rahasia. Dilakukan SETELAH build menulis
+    //    dist (closeBundle) — memutasi objek bundle secara langsung tidak
+    //    didukung rolldown-vite (error pada Object.set). Sumber di repo tetap
+    //    admin/index.html; dist produksi tidak pernah memuat /admin/.
+    closeBundle() {
+      if (adminPath === 'admin') return;
+      const from = resolve(ROOT, 'dist', 'admin', 'index.html');
+      if (!existsSync(from)) return;
+      const to = resolve(ROOT, 'dist', adminPath, 'index.html');
+      mkdirSync(join(ROOT, 'dist', adminPath), { recursive: true });
+      renameSync(from, to);
+      rmSync(resolve(ROOT, 'dist', 'admin'), { recursive: true, force: true });
+      this.info?.(`Panel admin dipindah ke /${adminPath}/ (env ADMIN_PATH).`);
+    },
   };
 }
 
@@ -176,6 +218,17 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, ROOT, '');
   const siteUrl = (env.VITE_SITE_URL || DEFAULT_SITE_URL).replace(/\/+$/, '');
 
+  // Path rahasia panel admin: env ADMIN_PATH (Vercel dashboard), bukan di repo.
+  // Validasi ketat supaya nilai jahat tidak bisa traversal (../../dst.)
+  const adminPath =
+    (env.ADMIN_PATH || 'admin').toLowerCase().replace(/[^a-z0-9-]/g, '') || 'admin';
+  if (adminPath === 'api' || adminPath === 'assets') {
+    throw new Error('ADMIN_PATH tidak boleh "api" atau "assets".');
+  }
+
+  // Halaman detail berita digenerate dulu dari content/berita.json ke
+  // berita/<slug>/index.html, lalu dipindai bersama halaman lain.
+  generateBeritaPages();
   const htmlFiles = collectHtmlFiles(ROOT);
 
   // Entry MPA: kunci bebas, Vite menyusun output mengikuti path relatif root
@@ -193,7 +246,7 @@ export default defineConfig(({ mode }) => {
   return {
     // 'mpa' = tanpa fallback index.html, jadi perilaku dev sama dengan produksi
     appType: 'mpa',
-    plugins: [siteBlueprint(htmlFiles, siteUrl)],
+    plugins: [siteBlueprint(htmlFiles, siteUrl, adminPath)],
     build: {
       rollupOptions: { input },
     },

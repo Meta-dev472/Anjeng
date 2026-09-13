@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="id" data-page="admin">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Panel Admin — OSIS SMK Texar</title>
+  <!-- Halaman privat: jangan diindeks mesin pencari -->
+  <meta name="robots" content="noindex, nofollow">
+
+  <link rel="icon" type="image/png" href="/favicon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script type="module" src="/src/admin.js"></script>
+</head>
+<body class="admin">
+
+  <header class="admin__topbar">
+    <span class="admin__brand">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 20a6 6 0 0 0-12 0"/><circle cx="12" cy="10" r="4"/><circle cx="19" cy="22" r="0"/></svg>
+      Panel Admin OSIS
+    </span>
+    <div class="admin__actions" id="admin-actions" hidden>
+      <a class="admin-btn" href="/" data-no-swup>Lihat Situs</a>
+      <button type="button" class="admin-btn admin-btn--danger" id="btn-logout">Keluar</button>
+    </div>
+  </header>
+
+  <main class="admin__main">
+
+    <!-- ============ LOGIN ============ -->
+    <section id="view-login">
+      <form class="admin-login" id="login-form">
+        <div class="admin-panel">
+          <h2>Masuk</h2>
+          <p class="admin-panel__desc">Khusus pengurus yang diberi izin mengelola konten situs.</p>
+
+          <label class="field__label" for="login-pass">Password admin</label>
+          <input class="field__input" type="password" id="login-pass" autocomplete="current-password" required>
+          <p class="admin-note" id="login-note" role="status" aria-live="polite"></p>
+          <button type="submit" class="admin-btn admin-btn--primary">Masuk</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- ============ DASHBOARD ============ -->
+    <section id="view-dash" hidden>
+
+      <nav class="admin-tabs" role="tablist" id="admin-tabs">
+        <button type="button" role="tab" aria-selected="true"  data-tab="aspirasi">Aspirasi</button>
+        <button type="button" role="tab" aria-selected="false" data-tab="berita">Berita</button>
+        <button type="button" role="tab" aria-selected="false" data-tab="beranda">Beranda</button>
+        <button type="button" role="tab" aria-selected="false" data-tab="galeri">Galeri</button>
+        <button type="button" role="tab" aria-selected="false" data-tab="struktur">Struktur</button>
+      </nav>
+
+      <p class="admin-note" id="admin-note" role="status" aria-live="polite"></p>
+
+      <!-- ===== Tab: Aspirasi ===== -->
+      <div class="admin-tab" data-tabpanel="aspirasi">
+        <div class="admin-panel">
+          <h2>Kotak Aspirasi</h2>
+          <p class="admin-panel__desc">Masukan yang masuk lewat formulir di halaman Kontak. Tersimpan di Vercel Blob, bukan di kode situs.</p>
+          <div id="aspirasi-list"><p class="admin-empty">Memuat…</p></div>
+        </div>
+      </div>
+
+      <!-- ===== Tab: Berita ===== -->
+      <div class="admin-tab" data-tabpanel="berita" hidden>
+        <div class="admin-panel">
+          <h2>Kelola Berita</h2>
+          <p class="admin-panel__desc">Satu baris = satu artikel. Menghapus baris akan menghapus halamannya saat deploy berikutnya.</p>
+          <div id="berita-list"></div>
+
+          <h2 style="margin-top:1.5rem">Editor Artikel</h2>
+          <p class="admin-panel__desc">Isi untuk artikel baru, atau klik “Edit” pada daftar di atas untuk memuat isinya.</p>
+
+          <label class="field__label" for="b-slug">Slug URL <span class="field__optional">mis. pentas-seni-2026 — jangan diubah saat mengedit</span></label>
+          <input class="field__input" id="b-slug" placeholder="pentas-seni-2026" pattern="[a-z0-9-]+">
+
+          <label class="field__label" for="b-title">Judul</label>
+          <input class="field__input" id="b-title" placeholder="Pentas Seni Akhir Semester">
+
+          <label class="field__label" for="b-shorttitle">Judul singkat breadcrumb <span class="field__optional">opsional</span></label>
+          <input class="field__input" id="b-shorttitle">
+
+          <label class="field__label" for="b-category">Kategori</label>
+          <input class="field__input" id="b-category" placeholder="Kepengurusan / Seni / Sosial / Prestasi">
+
+          <label class="field__label" for="b-date">Tanggal (YYYY-MM-DD)</label>
+          <input class="field__input" id="b-date" type="date">
+
+          <label class="field__label" for="b-lead">Lead / ringkasan pembuka</label>
+          <textarea class="field__input field__input--area" id="b-lead" rows="3" style="min-height:80px"></textarea>
+
+          <label class="field__label" for="b-excerpt">Ringkasan singkat untuk kartu</label>
+          <textarea class="field__input field__input--area" id="b-excerpt" rows="2" style="min-height:60px"></textarea>
+
+          <label class="field__label" for="b-image">URL foto kartu <span class="field__optional">opsional, mis. /foto/pentas.jpg</span></label>
+          <input class="field__input" id="b-image">
+
+          <label class="field__label" for="b-body">Isi artikel (HTML — boleh &lt;p&gt;, &lt;h2&gt;, &lt;ul&gt;, &lt;ol&gt;, &lt;blockquote&gt;, &lt;figure&gt;)</label>
+          <textarea class="field__input field__input--area admin-json" id="b-body" rows="12"></textarea>
+
+          <div class="btn-row" style="display:flex;gap:.5rem;flex-wrap:wrap">
+            <button type="button" class="admin-btn admin-btn--primary" id="b-save">Simpan Artikel → Commit</button>
+            <button type="button" class="admin-btn" id="b-clear">Bersihkan Form</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== Tab: Beranda ===== -->
+      <div class="admin-tab" data-tabpanel="beranda" hidden>
+        <div class="admin-panel">
+          <h2>Banner Event di Beranda</h2>
+          <p class="admin-panel__desc">Kartu pengumuman di atas hero. Kosongkan judul untuk menyembunyikan banner.</p>
+
+          <label class="field__label" for="e-tag">Label kecil</label>
+          <input class="field__input" id="e-tag" placeholder="Event selanjutnya">
+
+          <label class="field__label" for="e-title">Nama event</label>
+          <input class="field__input" id="e-title" placeholder="Maulid Nabi">
+
+          <label class="field__label" for="e-image">URL gambar banner <span class="field__optional">mis. /maulid.png</span></label>
+          <input class="field__input" id="e-image">
+
+          <label class="field__label" for="e-link">Tautan “Selengkapnya” <span class="field__optional">opsional</span></label>
+          <input class="field__input" id="e-link" placeholder="/berita/">
+
+          <label class="field__label" style="flex-direction:row;align-items:center;gap:.5rem">
+            <input type="checkbox" id="e-enabled" style="width:auto"> Tampilkan banner
+          </label>
+        </div>
+
+        <div class="admin-panel">
+          <h2>Angka Statistik</h2>
+          <p class="admin-panel__desc">Dipakai di carousel beranda dan marquee profil. Tulis apa adanya, mis. “120+”, “8”.</p>
+
+          <div class="admin-grid2">
+            <div><label class="field__label" for="s-anggota">Anggota aktif</label><input class="field__input" id="s-anggota"></div>
+            <div><label class="field__label" for="s-proker">Program kerja aktif</label><input class="field__input" id="s-proker"></div>
+            <div><label class="field__label" for="s-angkatan">Angkatan</label><input class="field__input" id="s-angkatan"></div>
+            <div><label class="field__label" for="s-aspirasi">Aspirasi terpenuhi</label><input class="field__input" id="s-aspirasi"></div>
+            <div><label class="field__label" for="s-sekbid">Sekbid aktif</label><input class="field__input" id="s-sekbid"></div>
+            <div><label class="field__label" for="s-periode">Periode kepengurusan</label><input class="field__input" id="s-periode"></div>
+          </div>
+        </div>
+
+        <div class="admin-panel">
+          <h2>Hero — Judul &amp; Deskripsi</h2>
+          <p class="admin-panel__desc">Teks besar di halaman beranda. Tiga kata pertama (bergerak / berkarya / berdampak) otomatis diberi warna aksen — kata kedua merah.</p>
+
+          <label class="field__label" for="h-eyebrow">Teks kecil di atas judul</label>
+          <input class="field__input" id="h-eyebrow">
+
+          <label class="field__label" for="h-pre">Pembuka judul</label>
+          <input class="field__input" id="h-pre" placeholder="Wadah bagi setiap siswa untuk ">
+
+          <div class="admin-grid2 admin-grid3">
+            <div><label class="field__label" for="h-a1">Kata aksen 1</label><input class="field__input" id="h-a1"></div>
+            <div><label class="field__label" for="h-a2">Kata aksen 2 <span class="field__optional">merah</span></label><input class="field__input" id="h-a2"></div>
+            <div><label class="field__label" for="h-a3">Kata aksen 3</label><input class="field__input" id="h-a3"></div>
+          </div>
+
+          <label class="field__label" for="h-after">Penutup judul <span class="field__optional">opsional, mis. titik</span></label>
+          <input class="field__input" id="h-after">
+
+          <label class="field__label" for="h-subtext">Paragraf deskripsi</label>
+          <textarea class="field__input field__input--area" id="h-subtext" rows="3" style="min-height:80px"></textarea>
+        </div>
+      </div>
+
+      <!-- ===== Tab: Galeri ===== -->
+      <div class="admin-tab" data-tabpanel="galeri" hidden>
+        <div class="admin-panel">
+          <h2>Galeri Foto</h2>
+          <p class="admin-panel__desc">
+            Format: array JSON — <code>{ "category": "akademik|seni|olahraga|sosial", "caption": "…", "image": "/foto/nama.jpg" }</code>.
+            Unggah berkas foto ke folder <code>public/foto/</code> lewat repo GitHub, lalu tuliskan jalurnya di sini.
+          </p>
+          <textarea class="admin-json" id="json-galeri" rows="14" spellcheck="false"></textarea>
+        </div>
+      </div>
+
+      <!-- ===== Tab: Struktur ===== -->
+      <div class="admin-tab" data-tabpanel="struktur" hidden>
+        <div class="admin-panel">
+          <h2>Kepengurusan Inti</h2>
+          <p class="admin-panel__desc">Format: array JSON — <code>{ "name": "…", "role": "…", "text": "…", "foto": "" }</code>.</p>
+          <textarea class="admin-json" id="json-inti" rows="10" spellcheck="false"></textarea>
+        </div>
+        <div class="admin-panel">
+          <h2>Divisi</h2>
+          <p class="admin-panel__desc">Format: array JSON — <code>{ "title": "…", "text": "…", "icon": "&lt;path …/&gt;" }</code>. Kosongkan <code>icon</code> untuk kartu tanpa ikon.</p>
+          <textarea class="admin-json" id="json-divisi" rows="12" spellcheck="false"></textarea>
+        </div>
+      </div>
+
+      <!-- Tombol simpan global (beranda/galeri/struktur) -->
+      <div class="btn-row" style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:2rem">
+        <button type="button" class="admin-btn admin-btn--primary" id="btn-save-content">Simpan Perubahan → Commit</button>
+        <button type="button" class="admin-btn" id="btn-reload-content">Muat Ulang</button>
+      </div>
+
+    </section>
+
+  </main>
+
+  <footer class="admin__foot">
+    Panel ini mengubah konten lewat commit GitHub — setiap perubahan tercatat dan bisa dikembalikan lewat riwayat repo.
+  </footer>
+
+</body>
+</html>

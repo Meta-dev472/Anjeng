@@ -62,7 +62,33 @@
         <span class="dot-grid dot-grid--hero" aria-hidden="true"></span>
         <div class="hero__container">
 
+          <!-- Banner event terdekat — sumber kebenaran: content/site.json →
+               site.event (edit lewat panel admin). Render: scripts/content.js
+               renderEventBanner(). Fallback markup hanya dipakai bila JSON
+               hilang/rusak — jangan dianggap sumber kebenaran. -->
+          <!-- @content:start event-banner -->
+          <aside class="hero__notice" data-intro aria-label="Pengumuman event terdekat">
+            <img class="hero__notice-media" src="/maulid.png" alt="" width="783" height="391">
+            <div class="hero__notice-overlay" aria-hidden="true"></div>
+            <div class="hero__notice-body">
+              <p class="hero__notice-tag">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/><path d="M20 2v4"/><path d="M22 4h-4"/><circle cx="4" cy="20" r="2"/></svg>
+                Event selanjutnya
+              </p>
+              <p class="hero__notice-title">Maulid Nabi</p>
+            </div>
+            <a class="hero__notice-link" href="/berita/">
+              <span class="hero__notice-link-text">Selengkapnya</span>
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </a>
+          </aside>
+          <!-- @content:end -->
+
           <div class="hero__copy">
+            <!-- Hero copy (eyebrow, judul, deskripsi) — sumber kebenaran:
+                 content/site.json → site.hero (edit lewat panel admin, tab
+                 Beranda). Render: scripts/content.js renderHeroCopy(). -->
+            <!-- @content:start hero-copy -->
             <p class="hero__eyebrow" data-intro>Organisasi Siswa Intra Sekolah &middot; Periode 2026/2027</p>
 
             <h1 class="hero__headline" data-intro>
@@ -74,34 +100,62 @@
             <p class="hero__subtext" data-intro>
               OSIS SMK Texar Karawang menghimpun aspirasi, kreativitas, dan kepemimpinan siswa lewat program kerja nyata di empat pilar: akademik, seni, olahraga, dan sosial.
             </p>
+            <!-- @content:end -->
 
             <!-- Kredibilitas singkat. Ikon: Lucide (users / calendar-check /
                  graduation-cap = komunitas, program kerja, angkatan).
-                 Angka 120+ adalah contoh — sesuaikan dengan jumlah anggota
-                 sebenarnya sebelum situs dipublikasikan. -->
-            <ul class="hero__stats" data-intro>
-              <li class="hero__stat">
-                <span class="hero__stat-icon" aria-hidden="true">
-                  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><path d="M16 3.128a4 4 0 0 1 0 7.744"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><circle cx="9" cy="7" r="4"/></svg>
-                </span>
-                <span class="hero__stat-number" data-count="120" data-count-suffix="+">120+</span>
-                <span class="hero__stat-label">Anggota aktif</span>
-              </li>
-              <li class="hero__stat">
-                <span class="hero__stat-icon" aria-hidden="true">
-                  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v3"/><path d="M16 2v3"/><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="m9 15 2 2 4-4"/></svg>
-                </span>
-                <span class="hero__stat-number" data-count="10" data-count-suffix="+">10+</span>
-                <span class="hero__stat-label">Program kerja aktif</span>
-              </li>
-              <li class="hero__stat">
-                <span class="hero__stat-icon" aria-hidden="true">
-                  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg>
-                </span>
-                <span class="hero__stat-number" data-count="18">18</span>
-                <span class="hero__stat-label">Angkatan</span>
-              </li>
-            </ul>
+                 PONSEL: track bisa di-swipe — carousel anime.js (src/lib/stats.js),
+                 count-up baru jalan saat kartu masuk viewport (Intersection
+                 Observer). DESKTOP: grid 3+2, tanpa geser.
+                 Angka adalah contoh — sesuaikan dengan data sebenarnya sebelum
+                 dipublikasikan. Catatan: angka "Program kerja" TUNGGAL (10+) —
+                 jangan tambah baris duplikat "12+ Program kerja" lagi. -->
+            <!-- Kartu statistik — sumber kebenaran: content/site.json →
+                 site.stats (edit lewat panel admin). Render:
+                 scripts/content.js renderHeroStats(). -->
+            <!-- @content:start hero-stats -->
+            <div class="hero__stats" data-intro aria-roledescription="carousel" aria-label="Statistik organisasi">
+              <ul class="hero__stats-track">
+                <li class="hero__stat">
+                  <span class="hero__stat-icon" aria-hidden="true">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><path d="M16 3.128a4 4 0 0 1 0 7.744"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><circle cx="9" cy="7" r="4"/></svg>
+                  </span>
+                  <span class="hero__stat-number" data-count="120" data-count-suffix="+">120+</span>
+                  <span class="hero__stat-label">Anggota aktif</span>
+                </li>
+                <li class="hero__stat">
+                  <span class="hero__stat-icon" aria-hidden="true">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v3"/><path d="M16 2v3"/><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="m9 15 2 2 4-4"/></svg>
+                  </span>
+                  <span class="hero__stat-number" data-count="10" data-count-suffix="+">10+</span>
+                  <span class="hero__stat-label">Program kerja aktif</span>
+                </li>
+                <li class="hero__stat">
+                  <span class="hero__stat-icon" aria-hidden="true">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg>
+                  </span>
+                  <span class="hero__stat-number" data-count="18">18</span>
+                  <span class="hero__stat-label">Angkatan</span>
+                </li>
+                <li class="hero__stat">
+                  <span class="hero__stat-icon" aria-hidden="true">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                  </span>
+                  <span class="hero__stat-number" data-count="500" data-count-suffix="+">500+</span>
+                  <span class="hero__stat-label">Aspirasi terpenuhi</span>
+                </li>
+                <li class="hero__stat">
+                  <span class="hero__stat-icon" aria-hidden="true">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="16" y="16" width="6" height="6" rx="1"/><rect x="2" y="16" width="6" height="6" rx="1"/><rect x="9" y="2" width="6" height="6" rx="1"/><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3"/><path d="M12 12V8"/></svg>
+                  </span>
+                  <span class="hero__stat-number" data-count="8">8</span>
+                  <span class="hero__stat-label">Sekbid aktif</span>
+                </li>
+              </ul>
+              <!-- Dot indicator dibangun oleh stats.js — tanpa JS tetap
+                   bisa di-swipe, tanpa dots kosong -->
+            </div>
+            <!-- @content:end -->
 
             <!-- Photo grid dokumentasi kegiatan, tepat di bawah deskripsi.
                  Cara mengisi foto asli: ganti <span class="hero__tile-media">
@@ -147,22 +201,7 @@
               <svg class="icon btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
             </a>
 
-            <!-- Mini metrics: kredibilitas instan. Angka masih contoh —
-                 sesuaikan dengan data sebenarnya sebelum dipublikasikan. -->
-            <ul class="hero__micro-metrics" data-intro>
-              <li class="hero__metric">
-                <span class="hero__metric-number" data-count="500" data-count-suffix="+">500+</span>
-                <span class="hero__metric-label">Aspirasi terpenuhi</span>
-              </li>
-              <li class="hero__metric">
-                <span class="hero__metric-number" data-count="12" data-count-suffix="+">12+</span>
-                <span class="hero__metric-label">Program kerja</span>
-              </li>
-              <li class="hero__metric">
-                <span class="hero__metric-number" data-count="8">8</span>
-                <span class="hero__metric-label">Sekbid aktif</span>
-              </li>
-            </ul>
+
 
             <a class="hero__scroll" href="#sorotan" data-intro>
               <span class="hero__scroll-icon" aria-hidden="true">
@@ -173,11 +212,13 @@
             </a>
           </div>
 
-          <!-- Slot foto sinematik. Cara mengisi: ganti <span class="hero__visual-media">
-               dengan <img src="/foto/nama-file.jpg" alt="..."> — overlay gradasi
-               gelap dan caption di bawahnya tetap bekerja tanpa ubah apa pun. -->
+          <!-- Slot foto sinematik (placeholder). Cara mengisi foto asli:
+                ganti <span class="hero__visual-media"> dengan
+                <img src="/foto/nama-file.jpg" alt="..."> — overlay gradasi
+                gelap dan caption di bawahnya tetap bekerja tanpa ubah apa pun.
+                Simpan berkas di public/foto/ agar ikut ter-build. -->
           <figure class="hero__visual" data-intro>
-            <span class="hero__visual-media" aria-hidden="true"></span>
+            <span class="hero__visual-media" data-reveal-img aria-hidden="true"></span>
             <figcaption class="hero__caption">
               <span class="hero__caption-label">Dokumentasi</span>
               <span class="hero__caption-note">Kegiatan OSIS sepanjang periode</span>

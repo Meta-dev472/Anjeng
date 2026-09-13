@@ -121,42 +121,6 @@ export function playPageAnimations(root = document) {
   initCardTilt(root);
 
   // 5. Angka beranimasi (Beranda)
-  initCounters(root);
-}
-
-/* --------------------------------------------------------------------------
-   Angka beranimasi — dipakai pita angka di Beranda:
-     <span data-count="10" data-count-suffix="+">10+</span>
-   Teks di HTML sudah berisi angka akhir, jadi bila JS gagal atau pengguna
-   memilih "kurangi gerakan", yang tampil tetap angka yang benar.
-   -------------------------------------------------------------------------- */
-function initCounters(root) {
-  const nodes = root.querySelectorAll('[data-count]');
-  if (!nodes.length) return;
-
-  nodes.forEach((node) => {
-    const target = Number.parseFloat(node.dataset.count);
-    if (Number.isNaN(target)) return;
-
-    const suffix = node.dataset.countSuffix || '';
-    const render = (value) => {
-      node.textContent = `${Math.round(value)}${suffix}`;
-    };
-
-    if (prefersReducedMotion) {
-      render(target);
-      return;
-    }
-
-    const state = { value: 0 };
-    gsap.to(state, {
-      value: target,
-      duration: 1.5,
-      ease: 'power2.out',
-      scrollTrigger: { trigger: node, start: 'top 92%', once: true },
-      onUpdate: () => render(state.value),
-    });
-  });
 }
 
 /* --------------------------------------------------------------------------

@@ -1,0 +1,429 @@
+/* ==========================================================================
+   PANEL ADMIN — /admin/
+   Sengaja di stylesheet terpisah (src/admin.css), tidak dibawa situs publik.
+   Token dideklarasikan mandiri di sini (sama dengan design system situs:
+   netral hangat + aksen merah tunggal) supaya halaman admin TIDAK perlu
+   memuat style.css situs — halaman admin tidak memakai Swup/GSAP.
+   ========================================================================== */
+
+:root {
+  /* Netral hangat (design.md) */
+  --ink-950: #000000;
+  --ink-900: #211922;
+  --ink-800: #262622;
+  --ink-700: #33332e;
+  --ink-500: #62625b;
+  --ink-400: #91918c;
+  --ink-200: #dadad3;
+  --ink-050: #fbfbf9;
+
+  --bg: #ffffff;
+  --bg-soft: #fbfbf9;
+  --heading: var(--ink-950);
+  --text: var(--ink-700);
+  --muted: var(--ink-500);
+  --border: var(--ink-200);
+  --card: #f6f6f3;
+
+  /* Aksen merah tunggal (design.md: Pinterest Red) */
+  --accent: #e60023;
+  --accent-hover: #cc001f;
+  --radius-md: 16px;
+
+  --font-sans: 'Inter', sans-serif;
+}
+
+/* ------------------------------------------------------------------ */
+/* Dasar                                                              */
+/* ------------------------------------------------------------------ */
+.admin {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-sans);
+  line-height: 1.5;
+}
+
+.admin__topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.8rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.admin__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.admin__brand {
+  color: var(--heading);
+}
+
+.admin__brand .icon {
+  width: 20px;
+  height: 20px;
+  color: var(--accent);
+}
+
+.admin__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.admin__main {
+  flex: 1;
+  width: 100%;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 4rem;
+}
+
+.admin__foot {
+  padding: 1rem 1.25rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.78rem;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* ------------------------------------------------------------------ */
+/* Login                                                              */
+/* ------------------------------------------------------------------ */
+.admin-login {
+  max-width: 380px;
+  margin: 12vh auto 0;
+  padding: 0 1.25rem;
+}
+
+.admin-login .card {
+  padding: 1.75rem;
+}
+
+/* ------------------------------------------------------------------ */
+/* Tab navigasi                                                       */
+/* ------------------------------------------------------------------ */
+.admin-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 1.25rem 0;
+}
+
+.admin-tabs button {
+  appearance: none;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.admin-tabs button:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.admin-tabs button[aria-selected="true"] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+/* ------------------------------------------------------------------ */
+/* Panel, kartu, tabel                                                */
+/* ------------------------------------------------------------------ */
+.admin-panel {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.admin-panel h2 {
+  margin: 0 0 0.35rem;
+  font-size: 1.05rem;
+  color: var(--heading);
+}
+
+.admin-panel__desc {
+  margin: 0 0 1rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.admin-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.9rem;
+  padding: 0.8rem 0;
+  border-top: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+
+.admin-row:first-of-type {
+  border-top: 0;
+}
+
+.admin-row__body {
+  min-width: 220px;
+  flex: 1;
+}
+
+.admin-row__title {
+  margin: 0;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.admin-row__meta {
+  margin: 0.15rem 0 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.admin-row__text {
+  margin: 0.35rem 0 0;
+  font-size: 0.88rem;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.admin-row__actions {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.admin-empty {
+  margin: 0.5rem 0;
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+
+/* ------------------------------------------------------------------ */
+/* Tombol & chip status                                               */
+/* ------------------------------------------------------------------ */
+.admin-btn {
+  appearance: none;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--heading);
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+
+.admin-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.admin-btn:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
+
+.admin-btn--primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.admin-btn--primary:hover {
+  color: #fff;
+  filter: brightness(1.08);
+}
+
+.admin-btn--danger:hover {
+  border-color: #d64545;
+  color: #d64545;
+}
+
+.admin-chip {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  text-transform: capitalize;
+}
+
+.admin-chip--baru { border-color: var(--accent); color: var(--accent); }
+.admin-chip--dibaca { border-color: #b8860b; color: #b8860b; }
+.admin-chip--selesai { border-color: #2e8b57; color: #2e8b57; }
+
+/* ------------------------------------------------------------------ */
+/* Field form (dipakai login, editor berita, dan form publik)         */
+/* ------------------------------------------------------------------ */
+.field {
+  display: block;
+  margin-bottom: 0.9rem;
+}
+
+.field__label {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+
+.field__optional {
+  font-weight: 400;
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+
+.field__input,
+.field__input--area {
+  width: 100%;
+  font: inherit;
+  font-size: 0.9rem;
+  color: var(--heading);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.55rem 0.7rem;
+  transition: border-color 0.15s ease;
+}
+
+.field__input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.field__input--area {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.field__hint {
+  margin: 0.3rem 0 0;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+/* ------------------------------------------------------------------ */
+/* Form aspirasi publik (dipakai juga di /kontak/)                    */
+/* ------------------------------------------------------------------ */
+.aspirasi-form__hp {
+  position: absolute;
+  left: -9999px;
+  height: 0;
+  overflow: hidden;
+}
+
+.aspirasi-form__status {
+  min-height: 1.2em;
+  margin: 0 0 0.6rem;
+  font-size: 0.82rem;
+}
+
+.aspirasi-form__status[data-tone="ok"] { color: #2e8b57; }
+.aspirasi-form__status[data-tone="err"] { color: #d64545; }
+
+.aspirasi-form__submit {
+  width: 100%;
+}
+
+.aspirasi-form__alt {
+  margin: 0.9rem 0 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.aspirasi-form__alt a {
+  color: var(--accent);
+}
+
+/* ------------------------------------------------------------------ */
+/* Editor JSON (galeri & struktur)                                    */
+/* ------------------------------------------------------------------ */
+.admin-grid2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 1rem;
+}
+
+@media (max-width: 560px) {
+  .admin-grid2,
+  .admin-grid3 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.admin-grid3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0 0.75rem;
+  margin-bottom: 0.9rem;
+}
+
+.admin-grid2 {
+
+.admin-json {
+  width: 100%;
+  min-height: 240px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--heading);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.7rem 0.8rem;
+  resize: vertical;
+}
+
+.admin-json:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.admin-json--err { border-color: #d64545; }
+
+/* ------------------------------------------------------------------ */
+/* Status aksi global                                                 */
+/* ------------------------------------------------------------------ */
+.admin-note {
+  margin: 0 0 1rem;
+  font-size: 0.85rem;
+  min-height: 1.2em;
+}
+
+.admin-note[data-tone="ok"] { color: #2e8b57; }
+.admin-note[data-tone="err"] { color: #d64545; }
+
+.admin-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
